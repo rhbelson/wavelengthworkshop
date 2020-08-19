@@ -58,20 +58,16 @@ future wheel requests torchserve torch-model-archiver
         
         mv fasterrcnn.mar model_store/
 
-6.  Create a configuration file for Torchserve (`config.properties`) and
-    configure Torchserve to listen on your instance's private IP.
-    
-    Be sure to substitute the ***private IP*** of your instance below. You can find the private IP for your instance in the EC2 console.
-    
-    The contents of `config.properties` should look as follows:
-    
-        inference_address=http://<your instance private IP>:8080
-        management_address=http://<your instance private IP>:8081
-    
-    For example:
-    
-        inference_address=http://10.0.0.253:8080
-        management_address=http://10.0.0.253:8081
+6.  Export an environment variable for the private IP of your inference server. ***Be sure to substitute in the value of your inference server below***
+
+        export INF_PRIVATE_IP=<inference server private IP>
+
+6. Create the configuration file (`config.properites`)
+
+        cat << EOF > config.properties
+        inference_address=http://$INF_PRIVATE_IP:8080
+        management_address=http://$INF_PRIVATE_IP:8081
+        EOF
 
 7.  Start the Torchserve server
     

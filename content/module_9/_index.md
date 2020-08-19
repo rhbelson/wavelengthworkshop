@@ -11,7 +11,7 @@ In this final step you'll use Verizon's NOVA platform to access the running appl
 
 1) Hover over the 5G graphic on the left and click ***Get Started***
 
-1) You will see a grid with a list of devices click the ***Assign*** button next to one of the devices
+1) You will see a grid with a list of devices click the ***Assign*** button next to one of the devices that is in the city closest to Region where you're deploying the workshop resources (Waltham for us-east-1 or San Francisco for us-west-1)
 
 1) Choose today's date and click ***Reserve***
 
