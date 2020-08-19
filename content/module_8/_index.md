@@ -82,7 +82,7 @@ Now that you have verified the API server can connect to the inference server, y
     
         python api.py
     
-    You should see output similar to the following:
+You should see output similar to the following:
     
         * Serving Flask app "api" (lazy loading)
         * Environment: production\
