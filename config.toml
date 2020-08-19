@@ -1,0 +1,15 @@
+baseURL = "http://wavelengthworkshop.com/"
+languageCode = "en-us"
+theme = "hugo-theme-learn"
+title = "AWS Wavelength Workshop"
+uglyurls = true
+
+[params]
+themeVariant = "mine"
+showVisitedLinks = false
+author = "Mike Coleman"
+description = "AWS Wavelength Workshop"
+disableSearch = true
+disableAssetsBusting = false
+disableLanguageSwitchingButton = true
+disableShortcutsTitle=true

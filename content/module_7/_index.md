@@ -1,0 +1,88 @@
++++
+title = "Step 7 - Configure the Inference Server Software"
+weight = 60
++++
+
+In this section you deploy Torchserve server with the fasterrcnn model. Torchserve receives the image from the API server, runs the inference, and returns the labels and bounding boxes for the items found in the image.
+
+I'm not going to spend time going into the inner workings of Torchserve in this post. However, if you're interested in learning more, check out my colleague [Shashank's blog](https://aws.amazon.com/blogs/machine-learningdeploying-pytorch-models-for-inference-at-scale-using-torchserve/).
+
+1.  You should still be SSH'd into the bastion host from the previous section, if you are not SSH back into the bastion instance.
+
+
+2.  From the bastion host SSH into your inference server using the ***private ip*** address. The user name is ***ubuntu***
+
+    ***Note***: When you SSH into the inference server you do not need to use the -i or -A parameters.
+
+        ssh ubuntu@<inference server private ip>
+
+    For example:
+
+        ssh ubuntu@10.0.0.253
+
+2.  Update the packages on the server and install the necessary prerequisite packages.
+    
+        sudo apt-get update -y \
+        && sudo apt-get install -y virtualenv openjdk-11-jdk gcc python3-dev
+
+3.  Create a virtual environment.
+    
+        mkdir inference && cd inference
+        
+        virtualenv --python=python3 inference
+        
+        source inference/bin/activate
+
+4.  Install Torchserve and its related components.
+    
+        pip3 install \
+        torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver
+
+future wheel requests torchserve torch-model-archiver
+
+5.  Install the inference model that the application will use.
+    
+        mkdir torchserve-examples && cd torchserve-examples
+        
+        git clone https://github.com/pytorch/serve.git
+        
+        mkdir model_store
+        
+        wget https://download.pytorch.org/models/fasterrcnn_resnet50_fpn_coco-258fb6c6.pth
+        
+        torch-model-archiver --model-name fasterrcnn --version 1.0 \
+        --model-file serve/examples/object_detector/fast-rcnn/model.py \
+        --serialized-file fasterrcnn_resnet50_fpn_coco-258fb6c6.pth \
+        --handler object_detector \
+        --extra-files serve/examples/object_detector/index_to_name.json
+        
+        mv fasterrcnn.mar model_store/
+
+6.  Create a configuration file for Torchserve (`config.properties`) and
+    configure Torchserve to listen on your instance's private IP.
+    
+    Be sure to substitute the ***private IP*** of your instance below. You can find the private IP for your instance in the EC2 console.
+    
+    The contents of `config.properties` should look as follows:
+    
+        inference_address=http://<your instance private IP>:8080
+        management_address=http://<your instance private IP>:8081
+    
+    For example:
+    
+        inference_address=http://10.0.0.253:8080
+        management_address=http://10.0.0.253:8081
+
+7.  Start the Torchserve server
+    
+        torchserve --start --model-store model_store --models \
+        fasterrcnn=fasterrcnn.mar --ts-config config.properties
+    
+    It will take a few seconds for the server to startup, when it's
+    ready you should see a line that ends with:
+
+        State change WORKER_STARTED -> WORKER_MODEL_LOADED
+
+Leave this SSH session running so you will be able to watch the
+inference server's logs to see when it receives requests from the API
+server.
