@@ -7,10 +7,10 @@ In this section you deploy Torchserve server with the fasterrcnn model. Torchser
 
 I'm not going to spend time going into the inner workings of Torchserve in this post. However, if you're interested in learning more, check out my colleague [Shashank's blog](https://aws.amazon.com/blogs/machine-learningdeploying-pytorch-models-for-inference-at-scale-using-torchserve/).
 
-1.  You should still be SSH'd into the bastion host from the previous section, if you are not SSH back into the bastion instance.
+* You should still be SSH'd into the bastion host from the previous section, if you are not SSH back into the bastion instance.
 
 
-2.  From the bastion host SSH into your inference server using the ***private ip*** address. The user name is ***ubuntu***
+* From the bastion host SSH into your inference server using the ***private ip*** address. The user name is ***ubuntu***
 
     ***Note***: When you SSH into the inference server you do not need to use the -i or -A parameters.
 
@@ -20,12 +20,12 @@ I'm not going to spend time going into the inner workings of Torchserve in this 
 
         ssh ubuntu@10.0.0.253
 
-2.  Update the packages on the server and install the necessary prerequisite packages.
+*  Update the packages on the server and install the necessary prerequisite packages.
     
         sudo apt-get update -y \
         && sudo apt-get install -y virtualenv openjdk-11-jdk gcc python3-dev
 
-3.  Create a virtual environment.
+* Create a virtual environment.
     
         mkdir inference && cd inference
         
@@ -33,14 +33,14 @@ I'm not going to spend time going into the inner workings of Torchserve in this 
         
         source inference/bin/activate
 
-4.  Install Torchserve and its related components.
+*  Install Torchserve and its related components.
     
         pip3 install \
         torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver
 
 future wheel requests torchserve torch-model-archiver
 
-5.  Install the inference model that the application will use.
+*  Install the inference model that the application will use.
     
         mkdir torchserve-examples && cd torchserve-examples
         
@@ -58,18 +58,18 @@ future wheel requests torchserve torch-model-archiver
         
         mv fasterrcnn.mar model_store/
 
-6.  Export an environment variable for the private IP of your inference server. ***Be sure to substitute in the value of your inference server below***
+*  Export an environment variable for the private IP of your inference server. ***Be sure to substitute in the value of your inference server below***
 
         export INF_PRIVATE_IP=<inference server private IP>
 
-6. Create the configuration file (`config.properites`)
+* Create the configuration file (`config.properites`)
 
         cat << EOF > config.properties
         inference_address=http://$INF_PRIVATE_IP:8080
         management_address=http://$INF_PRIVATE_IP:8081
         EOF
 
-7.  Start the Torchserve server
+*  Start the Torchserve server
     
         torchserve --start --model-store model_store --models \
         fasterrcnn=fasterrcnn.mar --ts-config config.properties

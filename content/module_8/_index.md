@@ -7,13 +7,13 @@ In this section, you'll test to ensure your API server can communciate over the 
 
 ##### Test communication with the inference server
 
-1. Start a new SSH into bastion host and then SSH into the ***private IP*** of the API server instance. Remember to use the `-A` option. 
+* Start a new SSH into bastion host and then SSH into the ***private IP*** of the API server instance. Remember to use the `-A` option. 
 
-1. Set an environment variable for the private IP address of your inference server. ***Be sure to substitute the private IP of your inference server below***
+* Set an environment variable for the private IP address of your inference server. ***Be sure to substitute the private IP of your inference server below***
 
         export INF_SERVER_PRIVATE_IP=<your inference server private IP>
 
-2.  Test your inference server (being sure to substitute the INTERNAL IP of the inference instance in the second line below):
+*  Test your inference server (being sure to substitute the INTERNAL IP of the inference instance in the second line below):
     
         curl -O https://s3.amazonaws.com/model-server/inputs/kitten.jpg
     
@@ -50,35 +50,35 @@ Now that you have verified the API server can connect to the inference server, y
 
 ##### Configure the API server
 
-3)  Run the following command to update system package information and  install necessary prerequisites.
+*  Run the following command to update system package information and  install necessary prerequisites.
     
         sudo apt-get update -y \
         && sudo apt-get install -y \
         libsm6 libxrender1 libfontconfig1 virtualenv libgl1-mesa-glx
 
-4)  Clone the Python code into the application directory
+*  Clone the Python code into the application directory
     
         mkdir apiserver && cd apiserver
     
         git clone https://github.com/mikegcoleman/flask_wavelength_api .
 
-5)  Create and activate a virtual environment.
+*  Create and activate a virtual environment.
     
         virtualenv --python=python3 apiserver
 
         source apiserver/bin/activate
 
-6)  Install necessary Python packages.
+*  Install necessary Python packages.
     
         pip3 install opencv-python flask pillow requests flask-cors
 
-7)  Create a configuration file (`config_values.txt`).
+*  Create a configuration file (`config_values.txt`).
 
         cat << EOF > config_values.txt
         http://$INF_SERVER_PRIVATE_IP:8080/predictions/fasterrcnn
         EOF     
 
-8)  Start the application.
+*  Start the application.
     
         python api.py
     

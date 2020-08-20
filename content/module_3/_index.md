@@ -8,7 +8,7 @@ In the following steps you'll create two subnets along with their associated rou
 
 ##### Create the subnet zone for the Wavelength Zone
 
-1.  Deploy a subnet in the Wavelength Zone
+*  Deploy a subnet in the Wavelength Zone
 
         export WL_SUBNET_ID=$(aws ec2 create-subnet \
         --region $REGION \
@@ -19,7 +19,7 @@ In the following steps you'll create two subnets along with their associated rou
         --query 'Subnet.SubnetId') \
         && echo '\nWL_SUBNET_ID='$WL_SUBNET_ID
 
-2.  Create the route table for the Wavelength subnet
+*  Create the route table for the Wavelength subnet
 
         export WL_RT_ID=$(aws ec2 create-route-table \
         --region $REGION \
@@ -28,14 +28,14 @@ In the following steps you'll create two subnets along with their associated rou
         --query 'RouteTable.RouteTableId') \
         && echo '\nWL_RT_ID='$WL_RT_ID
 
-3.  Associate the route table with the subnet. 
+*  Associate the route table with the subnet. 
 
         aws ec2 associate-route-table \
         --region $REGION \
         --route-table-id $WL_RT_ID \
         --subnet-id $WL_SUBNET_ID
 
-4. Add a default route to the route table that routes traffic through the carrier gateway. 
+* Add a default route to the route table that routes traffic through the carrier gateway. 
 
         aws ec2 create-route \
         --region $REGION \
@@ -45,7 +45,7 @@ In the following steps you'll create two subnets along with their associated rou
 
 ##### Create the bastion subnet
 
-1)  Deploy a subnet into the VPC letting AWS pick the availability zone. 
+*  Deploy a subnet into the VPC letting AWS pick the availability zone. 
 
         BASTION_SUBNET_ID=$(aws ec2 create-subnet \
         --region $REGION \
@@ -55,7 +55,7 @@ In the following steps you'll create two subnets along with their associated rou
         --query 'Subnet.SubnetId') \
         && echo '\nBASTION_SUBNET_ID='$BASTION_SUBNET_ID
 
-2)  Deploy the bastion subnet route table.
+*  Deploy the bastion subnet route table.
 
         export BASTION_RT_ID=$(aws ec2 create-route-table \
         --region $REGION \
@@ -64,7 +64,7 @@ In the following steps you'll create two subnets along with their associated rou
         --query 'RouteTable.RouteTableId') \
         && echo '\nBASTION_RT_ID='$BASTION_RT_ID
 
-3) Associate the route table with the subnet. 
+* Associate the route table with the subnet. 
 
         aws ec2 associate-route-table \
         --region $REGION \
@@ -72,7 +72,7 @@ In the following steps you'll create two subnets along with their associated rou
         --route-table-id $BASTION_RT_ID
 
 
-4) Create a default route that routes traffic to the Internet via the Internet gateway.
+* Create a default route that routes traffic to the Internet via the Internet gateway.
 
         aws ec2 create-route \
         --region $REGION \
@@ -82,7 +82,7 @@ In the following steps you'll create two subnets along with their associated rou
 
 
 
-5)  Modify the bastion subnet to assign public IPs by default
+*  Modify the bastion subnet to assign public IPs by default
 
         aws ec2 modify-subnet-attribute \
         --region $REGION \

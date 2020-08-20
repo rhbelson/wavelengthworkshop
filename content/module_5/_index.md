@@ -9,7 +9,7 @@ With the VPC and underlying networking and security deployed you can nowmove on 
 
 The API server will be a t3.instance based on a standard Ubuntu 18.04 AMI.
 
-1.  Deploy the API instance
+*  Deploy the API instance
 
         export API_INSTANCE_ID=$(aws ec2 run-instances \
         --region $REGION \
@@ -20,7 +20,7 @@ The API server will be a t3.instance based on a standard Ubuntu 18.04 AMI.
         --key-name $KEY_NAME) \
         && echo '\nAPI Server Instance ID '$API_INSTANCE_ID
 
-1) Take note of the API server private IP
+* Take note of the API server private IP
 
         aws ec2 describe-instances --instance-ids $API_INSTANCE_ID \
         --query 'Reservations[0].Instances[0].{"API server private IP": PrivateIpAddress}'  
@@ -30,7 +30,7 @@ The API server will be a t3.instance based on a standard Ubuntu 18.04 AMI.
 
 The inference server is a g4dn.2xlarge running the AWS deep learning AMI.
 
-1)  Deploy the inference instance
+* Deploy the inference instance
 
         export INF_INSTANCE_ID=$(aws ec2 run-instances \
         --region $REGION \
@@ -42,7 +42,7 @@ The inference server is a g4dn.2xlarge running the AWS deep learning AMI.
         --key-name $KEY_NAME) \
         && echo '\nInference Server Instance ID' $INF_INSTANCE_ID
 
-1) Take note of the Inference Servers Private IP
+* Take note of the Inference Servers Private IP
 
         aws ec2 describe-instances --instance-ids $INF_INSTANCE_ID \
         --query 'Reservations[0].Instances[0].{"Inference server private IP": PrivateIpAddress}'      
@@ -58,7 +58,7 @@ bastion host, and then from there SSH into your Wavelength instances.
 You are also going to install the client front end application onto the
 bastion host. 
 
-1.  Create the bastion / web instance
+*  Create the bastion / web instance
 
         export BASTION_INSTANCE_ID=$(aws ec2 run-instances \
         --region $REGION  \
@@ -72,7 +72,7 @@ bastion host.
         --key-name $KEY_NAME) \
         && echo '\nBastion Instance ID' $BASTION_INSTANCE_ID
 
-1. Take note of the bastion server public IP address you will need this later
+* Take note of the bastion server public IP address you will need this later
 
         aws ec2 describe-instances --instance-ids $BASTION_INSTANCE_ID \
         --query 'Reservations[0].Instances[0].{"Bastion server public IP": PublicIpAddress}' 

@@ -12,7 +12,7 @@ subnet).
 
 ##### Create the Elastic IPs
 
-1.  Create an EIP for the API server. This IP will be on the carrier network. 
+*  Create an EIP for the API server. This IP will be on the carrier network. 
 
         export API_CIP_ALLOC_ID=$(aws ec2 allocate-address \
         --region $REGION \
@@ -22,12 +22,12 @@ subnet).
         --query 'AllocationId') \
         && echo '\nAPI_CIP_ALLOC_ID='$API_CIP_ALLOC_ID
 
-1. Take note of the API server carrier (public) IP address.
+* Take note of the API server carrier (public) IP address.
 
         aws ec2 describe-addresses --allocation-ids $API_CIP_ALLOC_ID \
         --query 'Addresses[*].{"API server carrier (public) IP":CarrierIp}'
 
-1.  Create an Elastic IP (EIP) for the inference server. This IP will be on the carrier network. 
+*  Create an Elastic IP (EIP) for the inference server. This IP will be on the carrier network. 
 
         export INFERENCE_CIP_ALLOC_ID=$(aws ec2 allocate-address \
         --region $REGION \
@@ -39,7 +39,7 @@ subnet).
 
 ##### Create the Elastic Network Interfaces
 
-2.  Create an Elastic Network Interface (ENI) for the inference server. 
+*  Create an Elastic Network Interface (ENI) for the inference server. 
 
         export INFERENCE_ENI_ID=$(aws ec2 create-network-interface \
         --region $REGION \
@@ -49,7 +49,7 @@ subnet).
         --query 'NetworkInterface.NetworkInterfaceId') \
         && echo '\nINFERENCE_ENI_ID='$INFERENCE_ENI_ID
 
-2.  Create an ENI for the API server. 
+*  Create an ENI for the API server. 
 
         export API_ENI_ID=$(aws ec2 create-network-interface \
         --region $REGION \
@@ -61,13 +61,13 @@ subnet).
 
 ##### Assciate the EIPs with the ENIs
 
-3.  Associate the inference EIP with the ENI
+*  Associate the inference EIP with the ENI
 
         aws ec2 --region $REGION associate-address \
         --allocation-id $INFERENCE_CIP_ALLOC_ID \
         --network-interface-id $INFERENCE_ENI_ID
 
-3.  Associate the API EIP with the ENI
+*  Associate the API EIP with the ENI
 
         aws ec2 --region $REGION associate-address \
         --allocation-id $API_CIP_ALLOC_ID \

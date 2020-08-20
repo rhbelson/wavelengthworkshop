@@ -7,7 +7,7 @@ weight = 20
 
 
 
-1.  In order to get started, you will set some environment variables.
+*  In order to get started, you will set some environment variables.
     
     ***Note***: replace the value for KEY_NAME with the name of the key pair
     you wish to use. 
@@ -26,15 +26,15 @@ weight = 20
     OR
 
         export REGION="us-west-1"
-        export WL_ZONE=\"us-west-1-wl1-sfo-wlz-1"
-        export NBG=\"us-west-1-wl1-sfo-wlz-1"
+        export WL_ZONE="us-west-1-wl1-sfo-wlz-1"
+        export NBG="us-west-1-wl1-sfo-wlz-1"
         export INFERENCE_IMAGE_ID="ami-029510cec6d69f121"
         export API_IMAGE_ID="ami-0ac80df6eff0e70b5"
         export BASTION_IMAGE_ID="ami-027b7646dafdbe9fa"
 
-        export KEY_NAME=<your key nam\>   
+        export KEY_NAME=<your key name>   
 
-2.  Use the AWS CLI to create the VPC
+*  Use the AWS CLI to create the VPC
 
         export VPC_ID=$(aws ec2 create-vpc  \
         --region $REGION  \
@@ -43,7 +43,7 @@ weight = 20
         --query 'Vpc.VpcId')  \
         && echo '\nVPC_ID='$VPC_ID
 
-3.  Create an Internet gateway 
+*  Create an Internet gateway 
 
         export IGW_ID=$(aws ec2 create-internet-gateway  \
         --region $REGION  \
@@ -51,14 +51,14 @@ weight = 20
         --query 'InternetGateway.InternetGatewayId')  \
         && echo ' \nIGW_ID='$IGW_ID
 
-3. Attach the Internet gateway to the VPC
+* Attach the Internet gateway to the VPC
 
         aws ec2 attach-internet-gateway  \
         --region $REGION  \
         --vpc-id $VPC_ID  \
         --internet-gateway-id $IGW_ID
 
-4.  Add the carrier gateway
+*  Add the carrier gateway
 
         export CAGW_ID=$(aws ec2 create-carrier-gateway  \
         --region $REGION  \
