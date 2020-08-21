@@ -5,7 +5,9 @@ weight = 60
 
 The last server you deployed serves two purposes. It acts as the bastion host allowing you to SSH into your other two servers, and it serves the client web app. In this section you'll install that web app.
 
-* SSH into bastion host (the user name is ***bitnami***). 
+* Open a new terminal window. This will help preserve access to the environment variables you created earlier, which can be useful in trouble shooting. 
+
+* SSH into bastion host (the user name is ***bitnami***) from your new terminal window. 
 
     ***Note:*** In order to be able to easily SSH from the bastion host to the inference or API servers you will want to use the -A (agent forwarding) parameter when starting your SSH session e.g.:
 

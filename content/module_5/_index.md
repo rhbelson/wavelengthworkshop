@@ -13,6 +13,7 @@ The API server will be a t3.instance based on a standard Ubuntu 18.04 AMI.
 
         export API_INSTANCE_ID=$(aws ec2 run-instances \
         --region $REGION \
+        --output text \
         --instance-type t3.medium \
         --network-interface '[{"DeviceIndex":0,"NetworkInterfaceId":"'$API_ENI_ID'"}]' \
         --image-id $API_IMAGE_ID \

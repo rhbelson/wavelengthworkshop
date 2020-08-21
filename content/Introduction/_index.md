@@ -13,7 +13,7 @@ application that is comprised of three components:
 ![](../../images/final_diagram.png)
 
 The API server is built using Python and Flask, and runs on a t3.medium
-instance based upon a standard Unbuntu 18.04 image. It accepts an image
+instance based upon a standard Ubuntu 18.04 image. It accepts an image
 from the client application running on a device connected to the
 carriers 5G mobile network, which it then forwards to the inference
 server. The inference server returns the detected object along with

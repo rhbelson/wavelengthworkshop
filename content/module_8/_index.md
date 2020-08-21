@@ -7,7 +7,11 @@ In this section, you'll test to ensure your API server can communciate over the 
 
 ##### Test communication with the inference server
 
-* Start a new SSH into bastion host and then SSH into the ***private IP*** of the API server instance. Remember to use the `-A` option. 
+* Open a new terminal windows. This allows you to see the inference server logs in one session, and the API server logs in this new window. 
+
+* Start a SSH into bastion host from your new terminal session (Remember to use the `-A` option). 
+
+* From the bastion host SSH into the ***private IP*** of the API server instance.
 
 * Set an environment variable for the private IP address of your inference server. ***Be sure to substitute the private IP of your inference server below***
 

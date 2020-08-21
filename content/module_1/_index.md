@@ -25,9 +25,9 @@ weight = 20
 
     OR
 
-        export REGION="us-west-1"
-        export WL_ZONE="us-west-1-wl1-sfo-wlz-1"
-        export NBG="us-west-1-wl1-sfo-wlz-1"
+        export REGION="us-west-2"
+        export WL_ZONE="us-west-2-wl1-sfo-wlz-1"
+        export NBG="us-west2-1-wl1-sfo-wlz-1"
         export INFERENCE_IMAGE_ID="ami-029510cec6d69f121"
         export API_IMAGE_ID="ami-0ac80df6eff0e70b5"
         export BASTION_IMAGE_ID="ami-027b7646dafdbe9fa"
