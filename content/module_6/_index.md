@@ -7,11 +7,13 @@ The last server you deployed serves two purposes. It acts as the bastion host al
 
 * Open a new terminal window. This will help preserve access to the environment variables you created earlier, which can be useful in trouble shooting. 
 
+* On your local machine change into the directory that holds the  *.pem* for they key pair you specified when you created the instances. 
+
 * SSH into bastion host (the user name is ***bitnami***) from your new terminal window. 
 
     ***Note:*** In order to be able to easily SSH from the bastion host to the inference or API servers you will want to use the -A (agent forwarding) parameter when starting your SSH session e.g.:
 
-        ssh -i /path/to/key.pem -A bitnami@<bastion public ip address>
+        ssh -i key.pem -A bitnami@<bastion public ip address>
 
     For example:
 

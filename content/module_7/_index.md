@@ -7,7 +7,7 @@ In this section you deploy Torchserve server with the fasterrcnn model. Torchser
 
 I'm not going to spend time going into the inner workings of Torchserve in this post. However, if you're interested in learning more, check out my colleague [Shashank's blog](https://aws.amazon.com/blogs/machine-learningdeploying-pytorch-models-for-inference-at-scale-using-torchserve/).
 
-* You should still be SSH'd into the bastion host from the previous section, if you are not SSH back into the bastion instance.
+* You should still be SSH'd into the bastion host from the previous section, if you are not SSH back into the bastion instance. ***Note*** be sure you're starting the SSH session from the subirectory that holds your *.pem* file.
 
 
 * From the bastion host SSH into your inference server using the ***private ip*** address. The user name is ***ubuntu***
@@ -24,6 +24,14 @@ I'm not going to spend time going into the inner workings of Torchserve in this 
     
         sudo apt-get update -y \
         && sudo apt-get install -y virtualenv openjdk-11-jdk gcc python3-dev
+
+ ***Note***: If you get an error that the system can't set a lock file, that means it's still installing packages after booting up the first time. You can check to see if any `apt` processes are running by entering:
+
+        ps -ef | grep apt
+
+If the system returns just the line below, then it you should try the running the update and install commands again. If it shows more than one line, wait a few minutes and try again. 
+
+        ubuntu   20139  3569  0 16:42 pts/1    00:00:00 grep --color=auto apt
 
 * Create a virtual environment.
     
@@ -62,12 +70,11 @@ future wheel requests torchserve torch-model-archiver
 
         export INF_PRIVATE_IP=<inference server private IP>
 
-* Create the configuration file (`config.properites`)
+* Create the configuration file (`config.properites`) and display it to verify. 
 
-        cat << EOF > config.properties
-        inference_address=http://$INF_PRIVATE_IP:8080
-        management_address=http://$INF_PRIVATE_IP:8081
-        EOF
+        echo inference_address=http://$INF_PRIVATE_IP:8080 > config.properties
+        echo management_address=http://$INF_PRIVATE_IP:8081 >> config.properties
+        cat config.properties
 
 *  Start the Torchserve server
     

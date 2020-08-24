@@ -9,9 +9,11 @@ In this section, you'll test to ensure your API server can communciate over the 
 
 * Open a new terminal windows. This allows you to see the inference server logs in one session, and the API server logs in this new window. 
 
-* Start a SSH into bastion host from your new terminal session (Remember to use the `-A` option). 
+* Start a SSH into bastion host from your new terminal session (Remember to use the `-A` option). ***Note*** be sure you're starting the SSH session from the subirectory that holds your *.pem* file. 
 
-* From the bastion host SSH into the ***private IP*** of the API server instance.
+* From the bastion host SSH into the ***private IP*** of the API server instance. The user name is ***ubuntu***
+
+        ssh ubuntu@<api server private IP>
 
 * Set an environment variable for the private IP address of your inference server. ***Be sure to substitute the private IP of your inference server below***
 
@@ -60,7 +62,7 @@ Now that you have verified the API server can connect to the inference server, y
         && sudo apt-get install -y \
         libsm6 libxrender1 libfontconfig1 virtualenv libgl1-mesa-glx
 
-*  Clone the Python code into the application directory
+*  Clone the Python code into the application directory. ***NOTE*** be sure you include the '.' at the end of the *git clone* line - this tells git to clone into the *apiserver* directory vs creating a new subdirectory.
     
         mkdir apiserver && cd apiserver
     
@@ -78,9 +80,7 @@ Now that you have verified the API server can connect to the inference server, y
 
 *  Create a configuration file (`config_values.txt`).
 
-        cat << EOF > config_values.txt
-        http://$INF_SERVER_PRIVATE_IP:8080/predictions/fasterrcnn
-        EOF     
+        echo http://$INF_SERVER_PRIVATE_IP:8080/predictions/fasterrcnn > config_values.txt    
 
 *  Start the application.
     
