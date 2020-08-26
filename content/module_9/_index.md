@@ -35,6 +35,8 @@ A remote screen session will be started with the device. You can interact with t
 
 * Click ***Files***
 
+* Near the top under ***BROWSE FILES IN OTHER APPS*** hold your mouse button down and scroll right and click on ***Gallery***
+
 * Choose one of the files on the device
 
 * Click ***Process image** and the image will be re-rendered with the object detected and labeled
