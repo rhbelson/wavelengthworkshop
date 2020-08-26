@@ -7,7 +7,10 @@ In this final step you'll use Verizon's NOVA platform to access the running appl
 
 * Open a web browser on your local machine and navigate to [the Nova website](https://vzwdt.com/Nova/#/login)
 
-* Login in using the email that you used to register for this workshop, and the password provided by the instructor
+* Login to the Nova platform. The email will be the AWS credit code shown on the first screen of the lab guide followed by `@vzwdt.com`. For instance in the case of the example below the email would be `PCUX6Y302YOK2A@vzwdt.com`. The password is `Welcome-123`.
+
+![](../../images/credit_code.png)
+
 
 * Hover over the 5G graphic on the left and click ***Get Started***
 
