@@ -23,7 +23,7 @@ The API server will be a t3.instance based on a standard Ubuntu 18.04 AMI.
 
 * Take note of the API server private IP
 
-        aws ec2 describe-instances --instance-ids $API_INSTANCE_ID \
+        aws ec2 describe-instances --region $REGION --instance-ids $API_INSTANCE_ID \
         --query 'Reservations[0].Instances[0].{"API server private IP": PrivateIpAddress}'  
 
 
@@ -75,5 +75,5 @@ bastion host.
 
 * Take note of the bastion server public IP address you will need this later
 
-        aws ec2 describe-instances --instance-ids $BASTION_INSTANCE_ID \
+        aws ec2 describe-instances --region $REGION --instance-ids $BASTION_INSTANCE_ID \
         --query 'Reservations[0].Instances[0].{"Bastion server public IP": PublicIpAddress}' 
