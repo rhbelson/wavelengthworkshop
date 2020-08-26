@@ -11,7 +11,6 @@ In this final step you'll use Verizon's NOVA platform to access the running appl
 
 ![](../../images/credit_code.png)
 
-
 * Hover over the 5G graphic on the left and click ***Get Started***
 
 * You will see a grid with a list of devices click the ***Assign*** button next to one of the devices that is in the city closest to Region where you're deploying the workshop resources (Waltham for us-east-1 or San Francisco for us-west-1)
