@@ -25,7 +25,7 @@ subnet).
 * Take note of the API server carrier (public) IP address.
 
         aws ec2 describe-addresses --allocation-ids $API_CIP_ALLOC_ID \
-        --query 'Addresses[*].{"API server carrier (public) IP":CarrierIp}'
+        --query 'Addresses[*].{"API server carrier (public) IP":CarrierIp}' --region $REGION
 
 *  Create an Elastic IP (EIP) for the inference server. This IP will be on the carrier network. 
 
