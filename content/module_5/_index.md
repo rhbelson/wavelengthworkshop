@@ -45,7 +45,7 @@ The inference server is a g4dn.2xlarge running the AWS deep learning AMI.
 
 * Take note of the Inference Servers Private IP
 
-        aws ec2 describe-instances --instance-ids $INF_INSTANCE_ID \
+        aws ec2 describe-instances --region $REGION --instance-ids $INF_INSTANCE_ID \
         --query 'Reservations[0].Instances[0].{"Inference server private IP": PrivateIpAddress}'      
 
 ##### Deploy the bastion / web instance
