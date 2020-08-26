@@ -28,7 +28,7 @@ In this section you'll add three security groups:
         --query 'GroupId') \
         && echo '\nBASTION_SG_ID='$BASTION_SG_ID
 
-* Create an ingress rule to allow SSH from your current IP address. If you want to access SSH from anywhere change `$(curl https://checkip.amazonaws.com)/32` to `0.0.0.0\0` - but be aware that this allows access from any IP address and is considered a security anti-pattern. 
+* Create an ingress rule to allow SSH from your current IP address. If you want to access SSH from anywhere change `$(curl https://checkip.amazonaws.com)/32` to `0.0.0.0/0` - but be aware that this allows access from any IP address and is considered a security anti-pattern. 
 
         aws ec2 authorize-security-group-ingress \
         --region $REGION \
