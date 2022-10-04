@@ -14,23 +14,12 @@ weight = 20
     
     ***Note***: Choose the set of environment variables for the approprite Region.
 
-        export REGION="us-east-1"
-        export WL_ZONE="us-east-1-wl1-bos-wlz-1"
-        export NBG="us-east-1-wl1-bos-wlz-1"
-        export INFERENCE_IMAGE_ID="ami-029510cec6d69f121"
-        export API_IMAGE_ID="ami-0ac80df6eff0e70b5"
-        export BASTION_IMAGE_ID="ami-027b7646dafdbe9fa"
-
-        export KEY_NAME=<your key name>
-
-    OR
-
-        export REGION="us-west-2"
-        export WL_ZONE="us-west-2-wl1-sfo-wlz-1"
-        export NBG="us-west-2-wl1-sfo-wlz-1"
-        export INFERENCE_IMAGE_ID="ami-06278cf24c1b2f0fe"
-        export API_IMAGE_ID="ami-0a634ae95e11c6f91"
-        export BASTION_IMAGE_ID="ami-007d817567adaba64"
+        export REGION="ca-central-1"
+        export WL_ZONE="ca-central-1-wl1-yto-wlz-1"
+        export NBG="ca-central-1-wl1-yto-wlz-1"
+        export INFERENCE_IMAGE_ID="ami-014bc836b5c3e330e"
+        export API_IMAGE_ID="ami-089f7c9524e7245f9"
+        export BASTION_IMAGE_ID="ami-0a70476e631caa6d3"
 
         export KEY_NAME=<your key name>   
 
