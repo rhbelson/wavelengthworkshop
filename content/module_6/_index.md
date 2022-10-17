@@ -19,6 +19,11 @@ The last server you deployed serves two purposes. It acts as the bastion host al
 
         ssh -i my_key.pem -A bitnami@192.168.0.1
 
+*  Download dependencies for git and npm
+        sudo yum install -y git
+        curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
+        sudo yum install nodejs
+
 *  Clone the GitHub repo with the React code
     
         git clone https://github.com/mikegcoleman/react-wavelength-inference-demo.git
@@ -31,9 +36,13 @@ The last server you deployed serves two purposes. It acts as the bastion host al
 
         npm run build
 
-*  Copy the page into web servers root directory
+*  Copy the page into web servers root directory and configure nginx web server
+        sudo yum install -y httpd
+        sudo systemctl start httpd
+        sudo systemctl enable httpd
 
-        cp -r ./build/* /home/bitnami/htdocs
+        sudo mkdir /var/www/html
+        cp -r ./build/* /var/www/html 
 
 *  Test that the web app is running correctly by navigating to the
     public IP address of your bastion instance

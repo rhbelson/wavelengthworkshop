@@ -23,7 +23,7 @@ I'm not going to spend time going into the inner workings of Torchserve in this 
 *  Update the packages on the server and install the necessary prerequisite packages.
     
         sudo apt-get update -y \
-        && sudo apt-get install -y virtualenv openjdk-11-jdk gcc python3-dev
+        && sudo apt-get install -y virtualenv openjdk-11-jdk gcc python3-dev python3.8-venv
 
  ***Note***: If you get an error that the system can't set a lock file, that means it's still installing packages after booting up the first time. You can check to see if any `apt` processes are running by entering:
 
@@ -37,14 +37,14 @@ If the system returns just the line below, then it you should try the running th
     
         mkdir inference && cd inference
         
-        virtualenv --python=python3 inference
+        python3 -m venv inference
         
         source inference/bin/activate
 
 *  Install Torchserve and its related components.
     
         pip3 install \
-        torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver
+        torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver capture nvgpu
 
 future wheel requests torchserve torch-model-archiver
 
