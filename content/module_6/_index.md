@@ -20,6 +20,7 @@ The last server you deployed serves two purposes. It acts as the bastion host al
         ssh -i my_key.pem -A ec2-user@192.168.0.1
 
 *  Download dependencies for git and npm
+
         sudo yum install -y git
         curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
         sudo yum install nodejs
