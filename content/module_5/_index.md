@@ -34,14 +34,15 @@ The inference server is a g4dn.2xlarge running the AWS deep learning AMI.
 * Deploy the inference instance
 
         export INF_INSTANCE_ID=$(aws ec2 run-instances \
-        --region $REGION \
-        --instance-type g4dn.2xlarge \
-        --output text \
-        --network-interface '[{"DeviceIndex":0,"NetworkInterfaceId":"'$INFERENCE_ENI_ID'"}]' \
-        --image-id $INFERENCE_IMAGE_ID \
-        --query 'Instances[0].InstanceId' \
-        --key-name $KEY_NAME) \
-        && echo '\nInference Server Instance ID' $INF_INSTANCE_ID
+         --region $REGION \
+         --instance-type g4dn.2xlarge \
+         --output text \
+         --network-interface '[{"DeviceIndex":0,"NetworkInterfaceId":"'$INFERENCE_ENI_ID'"}]' \
+         --image-id $INFERENCE_IMAGE_ID \
+         --query 'Instances[0].InstanceId' \
+         --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"VolumeType":"gp2"}}]' \
+         --key-name $KEY_NAME) \
+         && echo '\nInference Server Instance ID' $INF_INSTANCE_ID
 
 * Take note of the Inference Servers Private IP
 
