@@ -17,7 +17,7 @@ weight = 20
         export REGION="ca-central-1"
         export WL_ZONE="ca-central-1-wl1-yto-wlz-1"
         export NBG="ca-central-1-wl1-yto-wlz-1"
-        export INFERENCE_IMAGE_ID="ami-014bc836b5c3e330e"
+        export INFERENCE_IMAGE_ID="ami-004a0b50ac8808acb"
         export API_IMAGE_ID="ami-089f7c9524e7245f9"
         export BASTION_IMAGE_ID="ami-046a5648dee483245"
 
