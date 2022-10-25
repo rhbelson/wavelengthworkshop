@@ -44,7 +44,7 @@ If the system returns just the line below, then it you should try the running th
 *  Install Torchserve and its related components.
     
         pip3 install \
-        torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver capture nvgpu
+        torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver captum nvgpu
 
 future wheel requests torchserve torch-model-archiver
 

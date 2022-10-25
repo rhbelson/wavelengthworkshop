@@ -9,15 +9,15 @@ The last server you deployed serves two purposes. It acts as the bastion host al
 
 * On your local machine change into the directory that holds the  *.pem* for they key pair you specified when you created the instances. 
 
-* SSH into bastion host (the user name is ***bitnami***) from your new terminal window. 
+* SSH into bastion host (the user name is ***ec2-user***) from your new terminal window. 
 
     ***Note:*** In order to be able to easily SSH from the bastion host to the inference or API servers you will want to use the -A (agent forwarding) parameter when starting your SSH session e.g.:
 
-        ssh -i key.pem -A bitnami@<bastion public ip address>
+        ssh -i key.pem -A ec2-user@<bastion public ip address>
 
     For example:
 
-        ssh -i my_key.pem -A bitnami@192.168.0.1
+        ssh -i my_key.pem -A ec2-user@192.168.0.1
 
 *  Download dependencies for git and npm
         sudo yum install -y git
