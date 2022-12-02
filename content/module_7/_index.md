@@ -5,8 +5,6 @@ weight = 60
 
 In this section you deploy Torchserve server with the fasterrcnn model. Torchserve receives the image from the API server, runs the inference, and returns the labels and bounding boxes for the items found in the image.
 
-I'm not going to spend time going into the inner workings of Torchserve in this post. However, if you're interested in learning more, check out my colleague [Shashank's blog](https://aws.amazon.com/blogs/machine-learningdeploying-pytorch-models-for-inference-at-scale-using-torchserve/).
-
 * You should still be SSH'd into the bastion host from the previous section, if you are not SSH back into the bastion instance. ***Note*** be sure you're starting the SSH session from the subirectory that holds your *.pem* file.
 
 
