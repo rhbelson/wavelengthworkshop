@@ -17,6 +17,12 @@ In this section you deploy Torchserve server with the fasterrcnn model. Torchser
     For example:
 
         ssh ubuntu@10.0.0.253
+        
+   ***Note***: If you're having trouble with SSH key forwarding, from your local IDE, run the following first (before SSH command to bastion):
+   ```
+   eval "$(ssh-agent)"
+   ssh-add <your-key-name>.pem
+   ```
 
 *  Update the packages on the server and install the necessary prerequisite packages.
     
@@ -42,9 +48,7 @@ If the system returns just the line below, then it you should try the running th
 *  Install Torchserve and its related components.
     
         pip3 install \
-        torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver captum nvgpu
-
-future wheel requests torchserve torch-model-archiver
+        torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver captum nvgpu future wheel requests torchserve torch-model-archiver
 
 *  Install the inference model that the application will use.
     
