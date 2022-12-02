@@ -5,6 +5,11 @@ weight = 20
 
 #### The first step in this tutorial will be to deploy the VPC, Internet gateway, and carrier gateway.
 
+*  First, we need to confirm vCPU limits to ensure your account can launch two t3.medium instances and one g4dn.2xlarge instances.
+
+
+    aws service-quotas request-service-quota-increase --service-code ec2 --quota-code L-1216C47A --region ca-central-1 --desired-value 16
+    aws service-quotas request-service-quota-increase --service-code ec2 --quota-code L-DB2E81BA --region ca-central-1 --desired-value 16
 
 
 *  In order to get started, you will set some environment variables.
@@ -32,6 +37,7 @@ weight = 20
         --region $REGION  \
         --output text  \
         --cidr-block 10.0.0.0/16  \
+        --tag-specifications ResourceType=vpc,Tags='[{Key=Name,Value="Bell-5G-Wavelength-VPC"}]' \
         --query 'Vpc.VpcId')  \
         && echo '\nVPC_ID='$VPC_ID
 

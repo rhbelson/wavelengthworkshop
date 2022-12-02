@@ -44,3 +44,4 @@ On the other hand, because the web application is only serving a single
 small static web page, it does not have the same latency requirements as
 the inference processing. For that reason, it's hosted in the Region
 instead of the Wavelength Zone.
+

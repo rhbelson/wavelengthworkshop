@@ -63,12 +63,16 @@ subnet).
 
 *  Associate the inference EIP with the ENI
 
-        aws ec2 --region $REGION associate-address \
+        export INF_ASSOCIATION_ID=$(aws ec2 --region $REGION associate-address \
         --allocation-id $INFERENCE_CIP_ALLOC_ID \
-        --network-interface-id $INFERENCE_ENI_ID
+        --network-interface-id $INFERENCE_ENI_ID \
+        --query 'AssociationId' --output text) \
+        && echo '\nAINF_ASSOCIATION_ID='$INF_ASSOCIATION_ID
 
 *  Associate the API EIP with the ENI
 
-        aws ec2 --region $REGION associate-address \
+        export API_ASSOCIATION_ID=$(aws ec2 --region $REGION associate-address \
         --allocation-id $API_CIP_ALLOC_ID \
-        --network-interface-id $API_ENI_ID
+        --network-interface-id $API_ENI_ID \
+        --query 'AssociationId' --output text) \
+        && echo '\nAPI_ASSOCIATION_ID='$API_ASSOCIATION_ID
