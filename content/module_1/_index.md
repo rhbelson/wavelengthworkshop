@@ -6,11 +6,10 @@ weight = 20
 #### The first step in this tutorial will be to deploy the VPC, Internet gateway, and carrier gateway.
 
 *  First, we need to confirm vCPU limits to ensure your account can launch two t3.medium instances and one g4dn.2xlarge instances.
-
-
+    ```
     aws service-quotas request-service-quota-increase --service-code ec2 --quota-code L-1216C47A --region ca-central-1 --desired-value 16
     aws service-quotas request-service-quota-increase --service-code ec2 --quota-code L-DB2E81BA --region ca-central-1 --desired-value 16
-
+    ```
 
 *  In order to get started, you will set some environment variables. Start by generating a key pair to use in the region (defaults to ca-central-1). If you have not done so, please run the following:
 
@@ -20,7 +19,7 @@ weight = 20
     ```
     
     Next, let's define the environment variables that we'll use throughout the workshop.
-
+    ```
     export REGION="ca-central-1"
     export WL_ZONE="ca-central-1-wl1-yto-wlz-1"
     export NBG="ca-central-1-wl1-yto-wlz-1"
@@ -28,6 +27,7 @@ weight = 20
     export API_IMAGE_ID="ami-089f7c9524e7245f9"
     export BASTION_IMAGE_ID="ami-046a5648dee483245"
     export KEY_NAME="my_key_pair"
+    ```
 
 *  Use the AWS CLI to create the VPC
     ```
