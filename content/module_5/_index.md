@@ -21,11 +21,25 @@ The API server will be a t3.instance based on a standard Ubuntu 18.04 AMI.
         --key-name $KEY_NAME) \
         && echo '\nAPI Server Instance ID '$API_INSTANCE_ID
 
+
 * Take note of the API server private IP
 
         aws ec2 describe-instances --region $REGION --instance-ids $API_INSTANCE_ID \
         --query 'Reservations[0].Instances[0].{"API server private IP": PrivateIpAddress}'  
 
+* NOTE: Should you not have a Bell 5G network-connected device, run the API server in the region with the following:
+        
+        export API_INSTANCE_ID=$(aws ec2 run-instances \
+        --region $REGION  \
+        --output text \
+        --instance-type t3.medium \
+        --associate-public-ip-address \
+        --subnet-id $BASTION_SUBNET_ID \
+        --image-id $API_IMAGE_ID \
+        --query 'Instances[0].InstanceId' \
+        --security-group-ids $API_SG_ID \
+        --key-name $KEY_NAME) \
+        && echo '\nBastion Instance ID' $API_INSTANCE_ID
 
 ##### Deploy the inference intance
 
