@@ -46,10 +46,10 @@ If the system returns just the line below, then it you should try the running th
         source inference/bin/activate
 
 *  Install Torchserve and its related components.
-    
+    ```
         pip3 install \
-        torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver captum nvgpu future wheel requests torchserve torch-model-archiver
-
+        torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver captum nvgpu 
+    ```
 *  Install the inference model that the application will use.
     
         mkdir torchserve-examples && cd torchserve-examples
