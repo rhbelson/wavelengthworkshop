@@ -60,7 +60,7 @@ Now that you have verified the API server can connect to the inference server, y
     
         sudo apt-get update -y \
         && sudo apt-get install -y \
-        libsm6 libxrender1 libfontconfig1 virtualenv libgl1-mesa-glx
+        libsm6 libxrender1 libfontconfig1 virtualenv libgl1-mesa-glx python3.8-venv
 
 *  Clone the Python code into the application directory. ***NOTE*** be sure you include the '.' at the end of the *git clone* line - this tells git to clone into the *apiserver* directory vs creating a new subdirectory.
     
@@ -70,8 +70,7 @@ Now that you have verified the API server can connect to the inference server, y
 
 *  Create and activate a virtual environment.
     
-        virtualenv --python=python3 apiserver
-
+        python3 -m venv inference
         source apiserver/bin/activate
 
 *  Install necessary Python packages.
