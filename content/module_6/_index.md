@@ -38,12 +38,14 @@ The last server you deployed serves two purposes. It acts as the bastion host al
         npm run build
 
 *  Copy the page into web servers root directory and configure nginx web server
+        
+        ```
         sudo yum install -y httpd
         sudo systemctl start httpd
         sudo systemctl enable httpd
-
         sudo mkdir /var/www/html
         cp -r ./build/* /var/www/html 
+        ```
 
 *  Test that the web app is running correctly by navigating to the
     public IP address of your bastion instance

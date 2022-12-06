@@ -18,7 +18,7 @@ weight = 20
     chmod 400 my_key_pair.pem
     ```
     
-    Next, let's define the environment variables that we'll use throughout the workshop.
+*  Next, let's define the environment variables that we'll use throughout the workshop.
     ```
     export REGION="ca-central-1"
     export WL_ZONE="ca-central-1-wl1-yto-wlz-1"
