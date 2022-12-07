@@ -48,7 +48,7 @@ If the system returns just the line below, then you should try the running the u
 *  Install Torchserve and its related components.
     ```
         pip3 install \
-        torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver captum nvgpu 
+        wheel pyyaml torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver captum nvgpu 
     ```
 *  Install the inference model that the application will use.
     
