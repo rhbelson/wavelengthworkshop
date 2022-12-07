@@ -33,7 +33,7 @@ In this section you deploy Torchserve server with the fasterrcnn model. Torchser
 
         ps -ef | grep apt
 
-If the system returns just the line below, then it you should try the running the update and install commands again. If it shows more than one line, wait a few minutes and try again. 
+If the system returns just the line below, then you should try the running the update and install commands again. If it shows more than one line, wait a few minutes and try again. 
 
         ubuntu   20139  3569  0 16:42 pts/1    00:00:00 grep --color=auto apt
 
