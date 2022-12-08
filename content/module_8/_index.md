@@ -74,8 +74,9 @@ Now that you have verified the API server can connect to the inference server, y
         source apiserver/bin/activate
 
 *  Install necessary Python packages.
-    
-        pip3 install scikit-build opencv-python flask pillow requests flask-cors 
+        
+        pip install -U pip
+        pip3 install opencv-python flask pillow requests flask-cors 
 
 *  Create a configuration file (`config_values.txt`).
 
