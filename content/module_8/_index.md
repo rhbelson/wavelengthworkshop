@@ -60,7 +60,7 @@ Now that you have verified the API server can connect to the inference server, y
     
         sudo apt-get update -y \
         && sudo apt-get install -y \
-        libsm6 libxrender1 libfontconfig1 virtualenv libgl1-mesa-glx python3.8-venv
+        libsm6 libxrender1 libfontconfig1 virtualenv libgl1-mesa-glx python3.8-venv python3-pip cmake
 
 *  Clone the Python code into the application directory. ***NOTE*** be sure you include the '.' at the end of the *git clone* line - this tells git to clone into the *apiserver* directory vs creating a new subdirectory.
     
@@ -70,12 +70,12 @@ Now that you have verified the API server can connect to the inference server, y
 
 *  Create and activate a virtual environment.
     
-        python3 -m venv inference
+        python3 -m venv apiserver
         source apiserver/bin/activate
 
 *  Install necessary Python packages.
     
-        pip3 install opencv-python flask pillow requests flask-cors
+        pip3 install scikit-build opencv-python flask pillow requests flask-cors 
 
 *  Create a configuration file (`config_values.txt`).
 
