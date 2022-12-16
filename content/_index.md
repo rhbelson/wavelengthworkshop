@@ -1,7 +1,7 @@
 ---
-title: "AWS Wavelength Workshop for Bell 5G"
+title: "AWS Wavelength Getting Started Guide"
 chapter: true
 weight: 1
 ---
 
-# AWS Wavelength Workshop (Bell 5G)
+# AWS Wavelength Getting Started Guide
