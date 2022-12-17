@@ -1,5 +1,5 @@
 +++
-title = "Module 2 - Configure Wavelength Zone Routing"
+title = "Module 2 - Create EC2 Instance with Carrier IP"
 weight = 30
 +++
 

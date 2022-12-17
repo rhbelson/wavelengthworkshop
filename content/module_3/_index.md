@@ -1,5 +1,5 @@
 +++
-title = "Module 3 - Create EC2 Instance with Carrier IP"
+title = "Module 3 - Create Session Manager IAM Role"
 weight = 40
 +++
 
