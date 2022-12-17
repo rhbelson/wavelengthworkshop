@@ -3,64 +3,69 @@ title = "Module 1 - Extend VPC to Multiple Wavelength Zones"
 weight = 20
 +++
 
-#### The first step in this tutorial will be to deploy the VPC, Internet gateway, and carrier gateway.
 
-*  First, we need to confirm vCPU limits to ensure your account can launch two t3.medium instances and one g4dn.2xlarge instances.
+In this module, we will demonstrate how to extend your Amazon VPC to multiple Wavelength Zones while continuing to use `us-west-2` as our AWS Region of choice.
 
+To start, define the environment variables that will be used to create our Wavelength Zone subnets. In this example, we would like to include the San Francisco, Los Angeles and Las Vegas Wavelength Zones as part of our application so we'll export 3 environment variables corresponding to Availability Zone ID of that subnet.
 
-    aws service-quotas request-service-quota-increase --service-code ec2 --quota-code L-1216C47A --region ca-central-1 --desired-value 16
-    aws service-quotas request-service-quota-increase --service-code ec2 --quota-code L-DB2E81BA --region ca-central-1 --desired-value 16
+    ```
+    export REGION="us-west-2"
+    export WAVELENGTH_ZONE_1="us-west-2-wl1-sfo-wlz-1"
+    export WAVELENGTH_ZONE_2="us-west-2-wl1-lax-wlz-1"
+    export WAVELENGTH_ZONE_3="us-west-2-wl1-las-wlz-1"
+    ```
 
+As an example, `WAVELENGTH_ZONE_1` corresponds to the San Francisco Wavelength Zone. The complete mapping of Availability Zone IDs to AWS Wavelength cities can be found in the [AWS Wavelength Locations](https://aws.amazon.com/wavelength/locations/) page. 
+        
 
-*  In order to get started, you will set some environment variables.
+Next, we will use the AWS CLI to create the VPC. Note that there is nothing Wavelength-specific in this step; more information about creating VPCs can be found in the [Amazon VPC User Guide](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html).
+    ```
+    export VPC_ID=$(aws ec2 create-vpc  \
+    --region $REGION  \
+    --output text  \
+    --cidr-block 10.0.0.0/16  \
+    --tag-specifications ResourceType=vpc,Tags='[{Key=Name,Value="Wavelength-Workshop-VPC"}]' \
+    --query 'Vpc.VpcId')  \
+    && echo 'VPC_ID='$VPC_ID
+    ```
     
+With the command above, we create an Amazon VPC with the `10.0.0.0/16` CIDR range, name the VPC `Wavelength-Workshop-VPC` and print out the VPC ID at the very end.
 
-    Start by generating a key pair to use in the region (defaults to ca-central-1). If you have not done so, please run the following:
+```
+Sample Output:
 
-    aws ec2 create-key-pair --key-name my_key_pair --query 'KeyMaterial' --output text > my_key_pair.pem
-    chmod 400 my_key_pair.pem
-    
-    
-    Next, let's define the environment variables that we'll use throughout the workshop.
+Admin:~/environment $ export VPC_ID=$(aws ec2 create-vpc  \
+>     --region $REGION  \
+>     --output text  \
+>     --cidr-block 10.0.0.0/16  \
+>     --tag-specifications ResourceType=vpc,Tags='[{Key=Name,Value="Wavelength-Workshop-VPC"}]' \
+>     --query 'Vpc.VpcId')  \
+>     && echo 'VPC_ID='$VPC_ID
+VPC_ID=vpc-01743658ac51bc14b
 
-        export REGION="ca-central-1"
-        export WL_ZONE="ca-central-1-wl1-yto-wlz-1"
-        export NBG="ca-central-1-wl1-yto-wlz-1"
-        export INFERENCE_IMAGE_ID="ami-004a0b50ac8808acb"
-        export API_IMAGE_ID="ami-089f7c9524e7245f9"
-        export BASTION_IMAGE_ID="ami-046a5648dee483245"
-        export KEY_NAME="my_key_pair"
+```
 
-*  Use the AWS CLI to create the VPC
+Next, we will create a Carrier Gateway. A carrier gateway serves two purposes:
+- It allows inbound traffic from a carrier network in a specific location
+- It allows outbound traffic to the carrier network and internet. There is no inbound connection configuration from the internet to a Wavelength Zone through the carrier gateway
+    ```
+    export CAGW_ID=$(aws ec2 create-carrier-gateway  \
+    --region $REGION  \
+    --output text  \
+    --vpc-id $VPC_ID  \
+    --query 'CarrierGateway.CarrierGatewayId')  \
+    && echo 'CAGW_ID='$CAGW_ID
+    ```
 
-        export VPC_ID=$(aws ec2 create-vpc  \
-        --region $REGION  \
-        --output text  \
-        --cidr-block 10.0.0.0/16  \
-        --tag-specifications ResourceType=vpc,Tags='[{Key=Name,Value="Bell-5G-Wavelength-VPC"}]' \
-        --query 'Vpc.VpcId')  \
-        && echo '\nVPC_ID='$VPC_ID
+With the command above, you will create and automatically attach a Carrier Gateway to the VPC you created in the prior step.
 
-*  Create an Internet Gateway 
+```
+Sample Output:
 
-        export IGW_ID=$(aws ec2 create-internet-gateway  \
-        --region $REGION  \
-        --output text  \
-        --query 'InternetGateway.InternetGatewayId')  \
-        && echo ' \nIGW_ID='$IGW_ID
-
-* Attach the Internet Gateway to the VPC
-
-        aws ec2 attach-internet-gateway  \
-        --region $REGION  \
-        --vpc-id $VPC_ID  \
-        --internet-gateway-id $IGW_ID
-
-*  Add the Carrier Gateway
-
-        export CAGW_ID=$(aws ec2 create-carrier-gateway  \
-        --region $REGION  \
-        --output text  \
-        --vpc-id $VPC_ID  \
-        --query 'CarrierGateway.CarrierGatewayId')  \
-        && echo '\nCAGW_ID='$CAGW_ID
+export CAGW_ID=$(aws ec2 create-carrier-gateway  \
+    --region $REGION  \
+    --output text  \
+    --vpc-id $VPC_ID  \
+    --query 'CarrierGateway.CarrierGatewayId')  \
+    && echo 'CAGW_ID='$CAGW_ID
+```
