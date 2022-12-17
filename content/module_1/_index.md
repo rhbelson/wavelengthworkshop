@@ -91,3 +91,84 @@ After completing these steps, you now have 3 private subnets within 3 separate A
     Admin:~/environment $     LAS_WLZ_SUBNET=$(aws ec2 create-subnet --vpc-id $VPC_ID --cidr-block 10.0.3.0/24 --availability-zone $WAVELENGTH_ZONE_3 --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=las-wlz-subnet}]' --query 'Subnet.SubnetId' --output text) && echo 'LAS_WLZ_SUBNET='$LAS_WLZ_SUBNET
     LAS_WLZ_SUBNET=subnet-009d25fa3ca5c72ad
 ```
+
+In this next step, we will try to create a new route table with a default route out through the Carrier Gateway. 
+
+```
+    
+    WLZ_RT=$(aws ec2 create-route-table --vpc-id $VPC_ID  --tag-specifications 'ResourceType=route-table,Tags=[{Key=Name,Value=wlz-rt}]' --query 'RouteTable.RouteTableId' --output text) && echo `WLZ_RT=`$WLZ_RT
+```
+
+In the command above, we're querying the Route Table ID of all of the Route Tables within the VPC; however, this VPC that we just created will only have a single route by default.
+To further inspect our route table, let's look at the current routes. You might notice that the `Routes` attribute is a list of a single object: under `GatewayId`, you'll see that this is the local route, directing all traffic within the VPC (the `10.0.0.0/16` CIDR range we set earlier, when creating the VPC) to stay within the VPC.
+
+```
+    Admin:~/environment $ aws ec2 describe-route-tables --filters Name=vpc-id,Values=$VPC_ID --query 'RouteTables[?Associations[0].Main != `true`]'
+    [
+        {
+            "Associations": [], 
+            "RouteTableId": "rtb-06ab5fc2ff76e9df4", 
+            "VpcId": "vpc-01743658ac51bc14b", 
+            "PropagatingVgws": [], 
+            "Tags": [
+                {
+                    "Value": "wlz-rt", 
+                    "Key": "Name"
+                }
+            ], 
+            "Routes": [
+                {
+                    "GatewayId": "local", 
+                    "DestinationCidrBlock": "10.0.0.0/16", 
+                    "State": "active", 
+                    "Origin": "CreateRouteTable"
+                }
+            ], 
+            "OwnerId": "227017984506"
+        }
+    ]
+```
+
+Now, the goal is to create an additional route so that all traffic destined internet or carrier-bound (i.e., `0.0.0.0/0`) will route through the Carrier Gateway we created earlier.
+
+```
+    aws ec2 create-route --route-table-id $WLZ_RT --destination-cidr-block 0.0.0.0/0 --carrier-gateway-id $CAGW_ID
+```
+
+As an output, you should get a response with `"Return": true`. Now, let's look at the route that was just created:
+
+```
+    Admin:~/environment $ aws ec2 describe-route-tables --filters Name=vpc-id,Values=$VPC_ID --query 'RouteTables[?Associations[0].Main != `true`]'
+    [
+        {
+            "Associations": [], 
+            "RouteTableId": "rtb-06ab5fc2ff76e9df4", 
+            "VpcId": "vpc-01743658ac51bc14b", 
+            "PropagatingVgws": [], 
+            "Tags": [
+                {
+                    "Value": "wlz-rt", 
+                    "Key": "Name"
+                }
+            ], 
+            "Routes": [
+                {
+                    "GatewayId": "local", 
+                    "DestinationCidrBlock": "10.0.0.0/16", 
+                    "State": "active", 
+                    "Origin": "CreateRouteTable"
+                }, 
+                {
+                    "Origin": "CreateRoute", 
+                    "DestinationCidrBlock": "0.0.0.0/0", 
+                    "State": "active", 
+                    "CarrierGatewayId": "cagw-0ff4c347e9a4218a8"
+                }
+            ], 
+            "OwnerId": "227017984506"
+        }
+    ]
+```
+
+Now that you have completed our VPC creation, subnet creation and route table configuration, you have officially completed your first module! 🎉
+
