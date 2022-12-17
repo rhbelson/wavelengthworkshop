@@ -4,12 +4,12 @@ chapter: true
 weight: 1
 ---
 
-## AWS Wavelength Getting Started Guide
+# AWS Wavelength Getting Started Guide
 
-In this user guide, learn the fundamentals of 5G mobile networks, mobile edge computing (MEC) alongside a step-by-step guide to deploying your first application AWS Wavelength. Moreover, learn how to measure application performance and troubleshoot popular FAQs and configurations.
+*   In this user guide, learn the fundamentals of 5G mobile networks, mobile edge computing (MEC) alongside a step-by-step guide to deploying your first application AWS Wavelength. Moreover, learn how to measure application performance and troubleshoot popular FAQs and configurations.
 
 ## What is AWS Wavelength?
-AWS Wavelength is an infrastructure service, powered by Amazon Web Services (AWS) and Bell, that enables developers to build applications within the 5G mobile network to deliver lower latency, more immersive experiences. 
+*   AWS Wavelength is an infrastructure service, powered by Amazon Web Services (AWS) and Bell, that enables developers to build applications within the 5G mobile network to deliver lower latency, more immersive experiences. 
 - AWS Wavelength offers developers standard AWS compute and storage services at the edge of
 the Bell 5G network via the extension a virtual private cloud (VPC) to one or more Wavelength Zones. 
 - An AWS Wavelength Zone is a zone in Bell’s 5G network where the AWS Wavelength infrastructure is deployed. Each Wavelength Zone is associated with a parent AWS Region. As an example, the Toronto Wavelength Zone (ca-central-1-wl1-yto-wlz-1) is associated with Canada (Central) AWS Region.
