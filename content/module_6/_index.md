@@ -1,5 +1,5 @@
 +++
-title = "Step 6 - Configure the Web host"
+title = "Module 6 - Configure Application Load Balancer (ALB)"
 weight = 60
 +++
 

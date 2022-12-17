@@ -1,5 +1,5 @@
 +++
-title = "Step 3 - Create Subnets and Routes"
+title = "Module 3 - Create EC2 Instance with Carrier IP"
 weight = 40
 +++
 

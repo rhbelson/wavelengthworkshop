@@ -1,5 +1,5 @@
 +++
-title = "Step 9 - Test the Application"
+title = "Module 9 - Edge Discovery"
 weight = 80
 +++
 

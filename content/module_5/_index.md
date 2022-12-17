@@ -1,5 +1,5 @@
 +++
-title = "Step 5 - Deploy the EC2 Instances"
+title = "Module 5 - Create EKS Cluster"
 weight = 60
 +++
 

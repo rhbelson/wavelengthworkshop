@@ -1,5 +1,5 @@
 +++
-title = "Step 8 - Deploy the API Server Software"
+title = "Module 8 - Workload Placement"
 weight = 70
 +++
 

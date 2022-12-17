@@ -1,5 +1,5 @@
 +++
-title = "Step 1 - Deploy the VPC"
+title = "Module 1 - Extend VPC to Multiple Wavelength Zones"
 weight = 20
 +++
 

@@ -1,5 +1,5 @@
 +++
-title = "Step 2 - Create the Security Groups"
+title = "Module 2 - Configure Wavelength Zone Routing"
 weight = 30
 +++
 

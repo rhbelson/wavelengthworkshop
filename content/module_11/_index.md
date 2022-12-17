@@ -1,5 +1,5 @@
 +++
-title = "Module 10 - Deleting AWS Wavelength Resources"
+title = "Provide Feedback and Learn More"
 weight = 90
 +++
 

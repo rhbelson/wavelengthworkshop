@@ -1,5 +1,5 @@
 +++
-title = "Step 7 - Configure the Inference Server Software"
+title = "Module 7 - Observability and Performance Testing"
 weight = 60
 +++
 

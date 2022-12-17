@@ -1,5 +1,5 @@
 +++
-title = "Step 4 - Create Elastic IPs and Network Interfaces"
+title = "Module 4 - Configure Bastion Host"
 weight = 50
 +++
 
