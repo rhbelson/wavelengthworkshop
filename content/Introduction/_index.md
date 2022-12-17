@@ -3,45 +3,23 @@ title = "Introduction"
 weight = 10
 +++
 
-The following tutorial guides you through deploying an object detection
-application that is comprised of three components:
+This workshop is intended to serve as a use case-agnostic overview of all of AWS Wavelength's native features and popular reference patterns, including:
 
--   A Wavelength-hosted API endpoint (using Flask)
--   A Wavelength-hosted Inference server (running Torchserve)
--   React-based client web app running
+-   AWS Wavelength subnets, Route Tables Carrier Gateway
+-   Amazon EC2 instances and Carrier IP Addresses
+-   Amazon EKS self-managed Node Groups
+-   Application Load Balancer (ALB)
 
-![](../../images/final_diagram.png)
+Moreover, this workshop will cover other infrastructure-agnostic techniques, optimized for edge, including:
+- Observability and Performance Testing
+- Workload Placement using Pod Topology Spread Constraints
+- Edge Discovery for north-south Traffic Routing
 
-The API server is built using Python and Flask, and runs on a t3.medium
-instance based upon a standard Ubuntu 18.04 image. It accepts an image
-from the client application running on a device connected to the
-carriers 5G mobile network, which it then forwards to the inference
-server. The inference server returns the detected object along with
-coordinates for that object (or an error if it can't detect any
-objects). The API server adds a text label and bounding boxes to the
-image and returns it to the mobile client.
+### More About AWS Wavelength
+Today, to reach cloud computing environments (including the AWS Region), traffic must traverse from a base station, through the backhaul network, anchor to a mobile IP address in the core, and then egress the cellular access network to the internet at-large. As a result of each of these logical “hops,” mobile traffic incurs a latency penalty (often in milliseconds) across each hop in a mobile packets journey, amounting to ~80-100ms in round-trip delay.
 
-The inference server runs
-[Torchserve](https://github.com/pytorch/serve), an open source project
-that provides a flexible and easy way to serve up PyTorch models. Object
-detection is done using a Faster R-CNN model. You then deploy it on a
-g4dn.2xlarge instance running the AWS deep learning Amazon Machine Image
-(AMI).
+To optimize latency in mobile environments today, developers can optimize the cloud application performance but what if they could optimize the network itself?
 
-You will use  a React web application to access the application services. 
+Instead of needing a “5G expert” on your development teams, AWS Wavelength abstracts away the complexity of 5G networks so developers can focus on building applications. In doing so, AWS compute and storage services are brought within the mobile core to reduce latency, increase the security posture of mobile applications, and minimize the “hops” between source (i.e., mobile device) and destination (i.e., edge cloud).
 
-Wavelength is designed to provide access to services and applications
-that require low latency. It's important to note that you don't need to
-deploy your entire application in a Wavelength Zone. You only need to
-deploy parts of your application that benefit from being deployed in the
-Wavelength Zone -- i.e., application components requiring low latency.
-
-In the case of the demo application, the API and inference servers are
-located in the Wavelength Zone because one of the design goals of the
-application is low-latency processing of the inference requests.
-
-On the other hand, because the web application is only serving a single
-small static web page, it does not have the same latency requirements as
-the inference processing. For that reason, it's hosted in the Region
-instead of the Wavelength Zone.
-
+<img src="https://d2908q01vomqb2.cloudfront.net/fe2ef495a1152561572949784c16bf23abb28057/2022/12/15/Screen-Shot-2022-12-15-at-12.11.20-PM.png">
