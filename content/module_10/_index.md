@@ -5,12 +5,12 @@ weight = 90
 
 In this last step, you will clean-up the resources created from this wokrshop the running application. 
 
-* Terminate the 3 running Amazon EC2 instances
+* Terminate the two running Amazon EC2 instances from Module 2 (Wavelength Zone Instance) and Module 4 (Bastion Host).
     ```
     aws ec2 terminate-instances --instance-ids $BASTION_INSTANCE_ID $EC2_WLZ_ID
     ```
     
-* Next, disassociate the Carrier IP addresses from the EKS Worker Node
+* Next, disassociate the Carrier IP addresses from the EKS Worker Node, delete the self-managed node CloudFormation Stack, and delete the EKS cluster.
     ```
     aws ec2 disassociate-address --association-id $AssociationId
     aws ec2 release-address --network-border-group us-west-2-wl1-las-wlz-1 --allocation-id $eks_allocation_id

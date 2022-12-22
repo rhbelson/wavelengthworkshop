@@ -3,89 +3,46 @@ title = "Module 7 - Observability and Performance Testing"
 weight = 60
 +++
 
-In this section you deploy Torchserve server with the fasterrcnn model. Torchserve receives the image from the API server, runs the inference, and returns the labels and bounding boxes for the items found in the image.
+After deploying the model successfully, we may want to monitor to performance of the underlying infrastructure in which your model is hosted, the application itself, or the health of the EKS cluster itself. To do so, the AWS Observability Accelerator offers a one-click solution that deploys AWS Distro for OpenTelemetry collector to collect metrics, stores the metrics on Amazon Managed Service for Prometheus and configure out-of-the-box Amazon Managed Grafana dashboards.
 
-I'm not going to spend time going into the inner workings of Torchserve in this post. However, if you're interested in learning more, check out my colleague [Shashank's blog](https://aws.amazon.com/blogs/machine-learningdeploying-pytorch-models-for-inference-at-scale-using-torchserve/).
+To get started, clone this GitHub repo, navigate to the existing-cluster-with-base-and-infra sub-directory, and edit the terraform.tfvars with your environment variables. As an example, from the Terraform module above, your cluster name may be eks-test-Cluster. Lastly, run terraform apply to create the infrastructure required for the AWS Observability Accelerator.
 
-* You should still be SSH'd into the bastion host from the previous section, if you are not SSH back into the bastion instance. ***Note*** be sure you're starting the SSH session from the subirectory that holds your *.pem* file.
-
-
-* From the bastion host SSH into your inference server using the ***private ip*** address. The user name is ***ubuntu***
-
-    ***Note***: When you SSH into the inference server you do not need to use the -i or -A parameters.
-
-        ssh ubuntu@<inference server private ip>
-
-    For example:
-
-        ssh ubuntu@10.0.0.253
-
-*  Update the packages on the server and install the necessary prerequisite packages.
-    
-        sudo apt-get update -y \
-        && sudo apt-get install -y virtualenv openjdk-11-jdk gcc python3-dev python3.8-venv
-
- ***Note***: If you get an error that the system can't set a lock file, that means it's still installing packages after booting up the first time. You can check to see if any `apt` processes are running by entering:
-
-        ps -ef | grep apt
-
-If the system returns just the line below, then it you should try the running the update and install commands again. If it shows more than one line, wait a few minutes and try again. 
-
-        ubuntu   20139  3569  0 16:42 pts/1    00:00:00 grep --color=auto apt
-
-* Create a virtual environment.
-    
-        mkdir inference && cd inference
+```
+        git clone https://github.com/aws-observability/terraform-aws-observability-accelerator.git
         
-        python3 -m venv inference
+        cd terraform-aws-observability-accelerator/examples/existing-cluster-with-base-and-infra
+         
+        cat << EOF > terraform.tfvars
         
-        source inference/bin/activate
-
-*  Install Torchserve and its related components.
-    
-        pip3 install \
-        torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver captum nvgpu
-
-future wheel requests torchserve torch-model-archiver
-
-*  Install the inference model that the application will use.
-    
-        mkdir torchserve-examples && cd torchserve-examples
+        # (mandatory) AWS Region where your resources will be located
+         aws_region = ""
+         
+        # (mandatory) EKS Cluster name
+         eks_cluster_id = ""
+         
+        # (mandatory) Amazon Managed Grafana Workspace ID: ex: g-abc123
+         managed_grafana_workspace_id = ""
         
-        git clone https://github.com/pytorch/serve.git
+        # (optional) Leave it empty for a new workspace to be created
+        # managed_prometheus_workspace_id = ""
+         
+        # (mandatory) Grafana API Key - https://docs.aws.amazon.com/grafana/latest/userguide/API_key_console.html
+         grafana_api_key = ""
         
-        mkdir model_store
-        
-        wget https://download.pytorch.org/models/fasterrcnn_resnet50_fpn_coco-258fb6c6.pth
-        
-        torch-model-archiver --model-name fasterrcnn --version 1.0 \
-        --model-file serve/examples/object_detector/fast-rcnn/model.py \
-        --serialized-file fasterrcnn_resnet50_fpn_coco-258fb6c6.pth \
-        --handler object_detector \
-        --extra-files serve/examples/object_detector/index_to_name.json
-        
-        mv fasterrcnn.mar model_store/
+        EOF
+        terraform init
+        terraform apply -auto-approve # Be sure to Save & Test Data Sources by navigating to https://<your-workspace>.<region>.amazonaws.com/datasources/edit/
+```
+After a few minutes, you should see the ADOT collector and Prometheus by running kubectl get pods --all-namespaces. However, given the hub-and-spoke design of AWS Wavelength, we must ensure that all control plane elements are reachable by all nodes and, thus, scheduled to the parent region. To make our lives easy, lest label the parent region nodes as such and use NodeSelectors to patch our existing workloads.
 
-*  Export an environment variable for the private IP of your inference server. ***Be sure to substitute in the value of your inference server below***
-
-        export INF_PRIVATE_IP=<inference server private IP>
-
-* Create the configuration file (`config.properites`) and display it to verify. 
-
-        echo inference_address=http://$INF_PRIVATE_IP:8080 > config.properties
-        echo management_address=http://$INF_PRIVATE_IP:8081 >> config.properties
-        cat config.properties
-
-*  Start the Torchserve server
-    
-        torchserve --start --model-store model_store --models \
-        fasterrcnn=fasterrcnn.mar --ts-config config.properties
-    
-    It will take a few seconds for the server to startup, when it's
-    ready you should see a line that ends with:
-
-        State change WORKER_STARTED -> WORKER_MODEL_LOADED
-
-Leave this SSH session running so you will be able to watch the
-inference server's logs to see when it receives requests from the API
-server.
+```
+        kubetl label nodes ip-10-0-1-134.ec2.internal parent-region=true
+        kubectl label nodes ip-10-0-2-148.ec2.internal  parent-region=true
+        kubectl patch deployment adot-collector -n adot-collector-kubeprometheus -p '{"spec": {"template": {"spec": {"nodeSelector": {"parent-region": "true"}}}}}' 
+        kubectl patch deployment -n cert-manager cert-manager -p '{"spec": {"template": {"spec": {"nodeSelector": {"parent-region": "true"}}}}}' 
+        kubectl patch deployment -n cert-manager cert-manager-cainjector -p '{"spec": {"template": {"spec": {"nodeSelector": {"parent-region": "true"}}}}}' 
+        kubectl patch deployment -n cert-manager cert-manager-webhook -p '{"spec": {"template": {"spec": {"nodeSelector": {"parent-region": "true"}}}}}' 
+        kubectl patch deployment -n opentelemetry-operator-system  opentelemetry-operator-controller-manager -p '{"spec": {"template": {"spec": {"nodeSelector": {"parent-region": "true"}}}}}' 
+        kubectl patch deployment -n kube-system kube-state-metrics -p '{"spec": {"template": {"spec": {"nodeSelector": {"parent-region": "true"}}}}}' 
+```
+At this point, navigate to your Amazon Managed Grafana workspace and browse the available dashboads!
