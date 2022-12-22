@@ -82,3 +82,12 @@ Lastly, attach the instance profile to the EC2 instance:
 ``` 
     aws ec2 associate-iam-instance-profile --iam-instance-profile Name=Wavelength-EC2-Instance-Profile --instance-id $EC2_WLZ_ID
 ```
+
+To use the AWS CLI to run session commands, the Session Manager plugin must also be installed on your local machine. For information, see [(Optional) Install the Session Manager plugin for the AWS CLI](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html).
+
+To start a session using the AWS CLI, run the following command replacing instance-id with your own information.
+
+```
+aws ssm start-session \
+    --target instance-id
+```
