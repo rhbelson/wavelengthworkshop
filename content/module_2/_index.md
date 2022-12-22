@@ -3,116 +3,72 @@ title = "Module 2 - Create EC2 Instance with Carrier IP"
 weight = 30
 +++
 
-In this section you'll add three security groups:
+In this section, we will need to configure 3 basic prerequisites for our Amazon EC2 Instance.
+1) Create a Security Group to attach to our Amazon EC2 instance.
+2) Create a Key Pair so that we can remotely access our instance via Secure Shell Protocol (SSH).
+3) Retrieve an Amazon Machine Image (ID) with which to launch our EC2 instance
 
--   **Bastion SG** allows SSH traffic from your local machine to the
-    bastion host as well as HTTP web traffic from the Internet
+First, start by creating the application security group.
 
--   **API SG** allows SSH traffic from the Bastion SG and opens up port
-    5000 to accept incoming API requests
-
--   **Inference SG** allows SSH traffic from the Bastion host and
-    communications on port 8080 and 8081 (the ports used by the
-    inference server) from the API SG.
-
-##### Create the Bastion security group
-
-*  Create the bastion security group.
-
-        export BASTION_SG_ID=$(aws ec2 create-security-group \
+```
+        export WAVELENGTH_SG_ID=$(aws ec2 create-security-group \
         --region $REGION \
         --output text \
-        --group-name bastion-sg \
-        --description "Security group for bastion host" \
+        --group-name wavelength-app-sg \
+        --description "Security group for Wavelength Zone application" \
         --vpc-id $VPC_ID \
         --query 'GroupId') \
-        && echo '\nBASTION_SG_ID='$BASTION_SG_ID
+        && echo 'WAVELENGTH_SG_ID='WAVELENGTH_SG_ID
+```
+Next, create an ingress rule to allow SSH from your current IP address. If you want to access SSH from anywhere change `$(curl https://checkip.amazonaws.com)/32` to `0.0.0.0/0` - but be aware that this allows access from any IP address and is considered a security anti-pattern. 
 
-* Create an ingress rule to allow SSH from your current IP address. If you want to access SSH from anywhere change `$(curl https://checkip.amazonaws.com)/32` to `0.0.0.0/0` - but be aware that this allows access from any IP address and is considered a security anti-pattern. 
-
+```
         aws ec2 authorize-security-group-ingress \
         --region $REGION \
-        --group-id $BASTION_SG_ID \
+        --group-id $WAVELENGTH_SG_ID \
         --protocol tcp \
         --port 22 \
         --cidr $(curl https://checkip.amazonaws.com)/32
+```
+Next, create a Key Pair and save it to your local filesystem. Note in this example, we will store the key material in a file called `edge-key.pem`. By default, this private key will be over-permissive, so we will also change the permissions for the private key to read-only for the user.
 
-* Create an ingress rule to all web traffic from any IP address. 
+```
+        aws ec2 create-key-pair --key-name edge-key --query 'KeyMaterial' --output text > edge-key.pem
+        chmod 400 edge-key.pem
+```     
+To ensure that we configured the key appropriately, we can call the `describe-key-pair` method to retrieve our key pair.
 
-        aws ec2 authorize-security-group-ingress \
-        --region $REGION \
-        --group-id $BASTION_SG_ID \
-        --protocol tcp \
-        --port 80 \
-        --cidr 0.0.0.0/0
+```
+        export EC2_KEY="edge-key"
+        
+        aws ec2 describe-key-pairs --key-names $EC2_KEY
+        
+        Sample output:
+        {
+            "KeyPairs": [
+                {
+                    "KeyPairId": "key-0408c8d7a52ba2a5f",
+                    "KeyFingerprint": "94:47:74:b4:e1:a2:54:93:61:7c:d8:57:c4:28:db:c1:a7:d5:6a:82",
+                    "KeyName": "edge-key",
+                    "Tags": []
+                }
+            ]
+        }
+```
 
-##### Create the API security group
+Next, let's use the AWS Systems Manager (SSM) API to query the latest Amazon Linux AMI ImageID value. Each Region has an exact replica namespace containing its Region-specific ImageID value.
 
-*  Create the API security group.
+```
+        AMI_ID_LINUX=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 --query 'Parameters[0].[Value]' --output text) && echo `AMI_ID_LINUX=`$AMI_ID_LINUX
+```
 
-        export API_SG_ID=$(aws ec2 create-security-group \
-        --region $REGION \
-        --output text \
-        --group-name api-sg \
-        --description "Security group for API host" \
-        --vpc-id $VPC_ID \
-        --query 'GroupId') \
-        && echo '\nAPI_SG_ID='$API_SG_ID
+Now, we're ready to launch our Amazon EC2 instance in the Wavelength Zone! To do so, we will need to provide the SubnetId we would like to use, the Security Group we created earlier, the AMI ID and the key name.
+```
+        EC2_WLZ_ID=$(aws ec2 run-instances --network-interfaces '[{"DeviceIndex":0, "SubnetId": "'"$WAVELENGTH_ZONE_1"'", "AssociateCarrierIpAddress": true, "Groups": ["'"$WAVELENGTH_SG_ID"'"]}]' --image-id $AMI_ID_LINUX --instance-type t3.medium  --key-name $EC2_KEY --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=Wavelength-Getting-Started-EC2-Instance}]' --query 'Instances[0].InstanceId' --output text)        
+```
 
-* Create an ingress rule that allows SSH from the Bastion security group
-
-        aws ec2 authorize-security-group-ingress \
-        --region $REGION \
-        --group-id $API_SG_ID \
-        --protocol tcp \
-        --port 22 \
-        --source-group $BASTION_SG_ID
-
-* Create an ingress rule that allows API requests over port 5000 from the Internet. 
-
-        aws ec2 authorize-security-group-ingress \
-        --region $REGION \
-        --group-id $API_SG_ID \
-        --protocol tcp \
-        --port 5000 \
-        --cidr 0.0.0.0/0
-
-##### Create the Inference security group
-
-*  Create the security group for the inference server.export 
-
-        INFERENCE_SG_ID=$(aws ec2 create-security-group \
-        --region $REGION \
-        --output text \
-        --group-name inference-sg \
-        --description "Security group for inference host" \
-        --vpc-id $VPC_ID \
-        --query 'GroupId') \
-        && echo '\nINFERENCE_SG_ID='$INFERENCE_SG_ID
-
-* Create an ingress rule that allows SSH from the Bastion security group
-
-        aws ec2 authorize-security-group-ingress \
-        --region $REGION \
-        --group-id $INFERENCE_SG_ID \
-        --protocol tcp \
-        --port 22 \
-        --source-group $BASTION_SG_ID
-
-* Create an ingress rule to allow infeference processing traffic from the API server.
-
-        aws ec2 authorize-security-group-ingress \
-        --region $REGION \
-        --group-id $INFERENCE_SG_ID \
-        --protocol tcp \
-        --port 8080 \
-        --source-group $API_SG_ID
-
-* Create an ingress rule to allow management api requests from the API server.
-
-        aws ec2 authorize-security-group-ingress \
-        --region $REGION \
-        --group-id $INFERENCE_SG_ID \
-        --protocol tcp \
-        --port 8081 \
-        --source-group $API_SG_ID
+If you navigate to the EC2 section of your AWS Console, you will now see an instance named `Wavelength-Getting-Started-EC2-Instance`. Another way to ensure that the Amazon EC2 instance was created properly is to query the Carrier IP address, like this:
+```
+        EC2_WLZ_IP=$(aws ec2 describe-instances --instance-id $EC2_WLZ_ID --query 'Reservations[*].Instances[*].NetworkInterfaces[*].Association.CarrierIp' --output text)
+        echo $EC2_WLZ_IP
+```
