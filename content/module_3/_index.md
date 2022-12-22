@@ -89,5 +89,5 @@ To start a session using the AWS CLI, run the following command replacing instan
 
 ```
 aws ssm start-session \
-    --target instance-id
+    --target $EC2_WLZ_ID
 ```
