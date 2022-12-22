@@ -263,7 +263,7 @@ In this step, we'll use the two variables (api_server,certificate_authority) abo
         
         export stack_name="wavelength-eks-node"
         
-        aws cloudformation create-stack --stack-name $stack_name --template-url https://amazon-eks.s3.us-west-2.amazonaws.com/cloudformation/2020-08-12/amazon-eks-nodegroup.yaml --parameters ParameterKey=ClusterControlPlaneSecurityGroup,ParameterValue=$EKS_CLUSTER_SG_ID ParameterKey=NodeGroupName,ParameterValue=$nodegroup_name ParameterKey=KeyName,ParameterValue=test_key_uswest2 ParameterKey=Subnets,ParameterValue=$LAS_WLZ_SUBNET ParameterKey=VpcId,ParameterValue=$VPC_ID ParameterKey=ClusterName,ParameterValue=$eks_cluster_name ParameterKey=NodeAutoScalingGroupDesiredCapacity,ParameterValue=1 ParameterKey=BootstrapArguments,ParameterValue="--apiserver-endpoint $api_server  --b64-cluster-ca $certificate_authority" --capabilities CAPABILITY_NAMED_IAM
+        aws cloudformation create-stack --stack-name $stack_name --template-url https://amazon-eks.s3.us-west-2.amazonaws.com/cloudformation/2020-08-12/amazon-eks-nodegroup.yaml --parameters ParameterKey=ClusterControlPlaneSecurityGroup,ParameterValue=$EKS_CLUSTER_SG_ID ParameterKey=NodeGroupName,ParameterValue=$nodegroup_name ParameterKey=KeyName,ParameterValue=edge_key ParameterKey=Subnets,ParameterValue=$LAS_WLZ_SUBNET ParameterKey=VpcId,ParameterValue=$VPC_ID ParameterKey=ClusterName,ParameterValue=$eks_cluster_name ParameterKey=NodeAutoScalingGroupDesiredCapacity,ParameterValue=1 ParameterKey=BootstrapArguments,ParameterValue="--apiserver-endpoint $api_server  --b64-cluster-ca $certificate_authority" --capabilities CAPABILITY_NAMED_IAM
         
         Sample Output:
         {
