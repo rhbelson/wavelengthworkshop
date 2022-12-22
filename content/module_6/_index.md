@@ -3,47 +3,49 @@ title = "Module 6 - Configure Application Load Balancer (ALB)"
 weight = 60
 +++
 
-The last server you deployed serves two purposes. It acts as the bastion host allowing you to SSH into your other two servers, and it serves the client web app. In this section you'll install that web app.
+For customers looking for an AWS-native approach for load balancing at the edge, the AWS Load Balancer Controller manages AWS Elastic Load Balancers for a Kubernetes cluster and provisions an AWS Application Load Balancer (ALB) when you create a Kubernetes Ingress. To deploy this solution, visit [Installing the AWS Load Balancer Controller add-on](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html).
 
-* Open a new terminal window. This will help preserve access to the environment variables you created earlier, which can be useful in trouble shooting. 
+**Step 1**: Download an IAM policy for the AWS Load Balancer Controller that allows it to make calls to AWS APIs on your behalf.
+```
+    curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.4/docs/install/iam_policy.json
+```
 
-* On your local machine change into the directory that holds the  *.pem* for they key pair you specified when you created the instances. 
-
-* SSH into bastion host (the user name is ***ec2-user***) from your new terminal window. 
-
-    ***Note:*** In order to be able to easily SSH from the bastion host to the inference or API servers you will want to use the -A (agent forwarding) parameter when starting your SSH session e.g.:
-
-        ssh -i key.pem -A ec2-user@<bastion public ip address>
-
-    For example:
-
-        ssh -i my_key.pem -A ec2-user@192.168.0.1
-
-*  Download dependencies for git and npm
-
-        sudo yum install -y git
-        curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
-        sudo yum install nodejs
-
-*  Clone the GitHub repo with the React code
+**Step 2**: Create an IAM policy using the policy downloaded in the previous step. 
+```
+    ALB_IAM_POLICY=$(aws iam create-policy \
+    --policy-name AWSLoadBalancerControllerIAMPolicy \
+    --policy-document file://iam_policy.json --query Policy.PolicyArn --text) && echo 'ALB_IAM_POLICY='$ALB_IAM_POLICY
+```
     
-        git clone https://github.com/mikegcoleman/react-wavelength-inference-demo.git
+**Step 3:** Create an IAM Role
+Create a Kubernetes service account named `aws-load-balancer-controller` in the `kube-system` namespace for the AWS Load Balancer Controller and annotate the Kubernetes service account with the name of the IAM role.
 
-*  Install the dependencies
+You can use eksctl or the AWS CLI and kubectl to create the IAM role and Kubernetes service account.
+```
+    eksctl create iamserviceaccount \
+      --cluster=$eks_cluster_name  \
+      --namespace=kube-system \
+      --name=aws-load-balancer-controller \
+      --role-name "AmazonEKSLoadBalancerControllerRole" \
+      --attach-policy-arn=$ALB_IAM_POLICY \
+      --approve
+```
+  
+**Step 4:** Install the AWS Load Balancer Controller using Helm 
+```
+    helm repo add eks https://aws.github.io/eks-charts
+    helm repo update
+    helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+      -n kube-system \
+      --set clusterName=$eks_cluster_name \
+      --set serviceAccount.create=false \
+      --set serviceAccount.name=aws-load-balancer-controller 
+```
 
-        cd react-wavelength-inference-demo && npm install
+**Step 5:** Patch aws-load-balancer-controller Deployment to Support Multiple Wavelength Zones
+```
+    kubectl patch deployment aws-load-balancer-controller -n kube-system -p '{"spec": {"template": {"spec": {"nodeSelector": {"topology": "us-west-2a"}}}}}'
+```
 
-* Build the web page
-
-        npm run build
-
-*  Copy the page into web servers root directory and configure nginx web server
-        sudo yum install -y httpd
-        sudo systemctl start httpd
-        sudo systemctl enable httpd
-
-        sudo mkdir /var/www/html
-        cp -r ./build/* /var/www/html 
-
-*  Test that the web app is running correctly by navigating to the
-    public IP address of your bastion instance
+### Create Sample Workload
+In this example, we will create a simple web Deployment in front of an Ingress, which will provision an ALB upon creation.
