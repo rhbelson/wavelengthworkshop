@@ -3,76 +3,77 @@ title = "Module 4 - Configure Bastion Host"
 weight = 50
 +++
 
-The final step before deploying the actual instances is to create two
-Elastic IPs which will come from the carrier network. These IP
-addresses will be assigned to two Elastic Network Interfaces (ENIs), and
-the ENIs will be assigned to our API and Inference server (the bastion
-host will have it's public IP assigned upon creation by the bastion
-subnet).
+In the previous module, we described the Session Manager access pattern for EC2 instances in a Wavelength Zone. In this module, we will demo an alternative technique using bastion hosts.
 
-##### Create the Elastic IPs
+A bastion host is a server whose purpose is to provide access to a private network from an external network, such as the Internet. In this module, we will create a bastion host in a new public subnet within the AWS Region, configure the routing for this public subnet, and deploy the EC2 instance configured with a security group allowing inbound traffic from SSH. Lastly, we will modify the Wavelength Zone EC2 instance's Security Group to allow SSH traffic from the security group of the bastion host.
 
-*  Create an EIP for the API server. This IP will be on the carrier network. 
+##### Create the bastion subnet
 
-        export API_CIP_ALLOC_ID=$(aws ec2 allocate-address \
+*  Deploy a subnet into the VPC letting AWS pick the availability zone. 
+
+        BASTION_SUBNET_ID=$(aws ec2 create-subnet \
         --region $REGION \
         --output text \
-        --domain vpc \
-        --network-border-group $NBG \
-        --query 'AllocationId') \
-        && echo '\nAPI_CIP_ALLOC_ID='$API_CIP_ALLOC_ID
+        --cidr-block 10.0.1.0/24 \
+        --vpc-id $VPC_ID \
+        --query 'Subnet.SubnetId') \
+        && echo '\nBASTION_SUBNET_ID='$BASTION_SUBNET_ID
 
-* Take note of the API server carrier (public) IP address.
+*  Deploy the bastion subnet route table.
 
-        aws ec2 describe-addresses --allocation-ids $API_CIP_ALLOC_ID \
-        --query 'Addresses[*].{"API server carrier (public) IP":CarrierIp}' --region $REGION
-
-*  Create an Elastic IP (EIP) for the inference server. This IP will be on the carrier network. 
-
-        export INFERENCE_CIP_ALLOC_ID=$(aws ec2 allocate-address \
+        export BASTION_RT_ID=$(aws ec2 create-route-table \
         --region $REGION \
         --output text \
-        --domain vpc \
-        --network-border-group $NBG \
-        --query 'AllocationId') \
-        && echo '\nINFERENCE_CIP_ALLOC_ID='$INFERENCE_CIP_ALLOC_ID
+        --vpc-id $VPC_ID \
+        --query 'RouteTable.RouteTableId') \
+        && echo '\nBASTION_RT_ID='$BASTION_RT_ID
 
-##### Create the Elastic Network Interfaces
+* Associate the route table with the subnet. 
 
-*  Create an Elastic Network Interface (ENI) for the inference server. 
-
-        export INFERENCE_ENI_ID=$(aws ec2 create-network-interface \
+        aws ec2 associate-route-table \
         --region $REGION \
-        --output text \
-        --subnet-id $WL_SUBNET_ID \
-        --groups $INFERENCE_SG_ID \
-        --query 'NetworkInterface.NetworkInterfaceId') \
-        && echo '\nINFERENCE_ENI_ID='$INFERENCE_ENI_ID
+        --subnet-id $BASTION_SUBNET_ID \
+        --route-table-id $BASTION_RT_ID
 
-*  Create an ENI for the API server. 
 
-        export API_ENI_ID=$(aws ec2 create-network-interface \
+* Create a default route that routes traffic to the Internet via the Internet gateway.
+
+        aws ec2 create-route \
         --region $REGION \
-        --output text \
-        --subnet-id $WL_SUBNET_ID \
-        --groups $API_SG_ID \
-        --query 'NetworkInterface.NetworkInterfaceId') \
-        && echo '\nAPI_ENI_ID='$API_ENI_ID
+        --route-table-id $BASTION_RT_ID \
+        --destination-cidr-block 0.0.0.0/0 \
+        --gateway-id $IGW_ID
 
-##### Assciate the EIPs with the ENIs
 
-*  Associate the inference EIP with the ENI
+*  Modify the bastion subnet to assign public IPs by default
 
-        export INF_ASSOCIATION_ID=$(aws ec2 --region $REGION associate-address \
-        --allocation-id $INFERENCE_CIP_ALLOC_ID \
-        --network-interface-id $INFERENCE_ENI_ID \
-        --query 'AssociationId' --output text) \
-        && echo '\nAINF_ASSOCIATION_ID='$INF_ASSOCIATION_ID
+        aws ec2 modify-subnet-attribute \
+        --region $REGION \
+        --subnet-id $BASTION_SUBNET_ID \
+        --map-public-ip-on-launch
 
-*  Associate the API EIP with the ENI
 
-        export API_ASSOCIATION_ID=$(aws ec2 --region $REGION associate-address \
-        --allocation-id $API_CIP_ALLOC_ID \
-        --network-interface-id $API_ENI_ID \
-        --query 'AssociationId' --output text) \
-        && echo '\nAPI_ASSOCIATION_ID='$API_ASSOCIATION_ID
+#### Deploy the bastion / web instance
+
+You must deploy a bastion server in order to SSH into your application instances. Remember that the carrier gateway in a Wavelength Zone only allows ingress from the carrier's 5G network. This means that in order to SSH into the API and inference servers you need to first SSH into the bastion host, and then from there SSH into your Wavelength instances.
+
+You are also going to install the client front end application onto the bastion host.
+```
+     export BASTION_INSTANCE_ID=$(aws ec2 run-instances \
+     --region $REGION  \
+     --output text \
+     --instance-type t3.medium \
+     --associate-public-ip-address \
+     --subnet-id $BASTION_SUBNET_ID \
+     --image-id $BASTION_IMAGE_ID \
+     --query 'Instances[0].InstanceId' \
+     --security-group-ids $BASTION_SG_ID \
+     --key-name $KEY_NAME) \
+     && echo '\nBastion Instance ID' $BASTION_INSTANCE_ID
+```
+
+Take note of the bastion server public IP address you will need this later
+```
+      aws ec2 describe-instances --region $REGION --instance-ids $BASTION_INSTANCE_ID \
+      --query 'Reservations[0].Instances[0].{"Bastion server public IP": PublicIpAddress}' 
+```

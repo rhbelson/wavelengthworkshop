@@ -4,87 +4,81 @@ weight = 40
 +++
 
 
-In the following steps you'll create two subnets along with their associated routing tables and routes. One subnet is associated with the Wavelength Zone, and will only be accesible over the carrier network. The other subnet will hold your bastion host, and will accessible via the Internet. 
+One of the most frequent FAQs we get from developers is how to access Wavelength Zone instances without access to the carrier network. 
 
-##### Create the subnet zone for the Wavelength Zone
+Over the next 2 modules, we will describe two AWS Wavelength resource access patterns, starting with Session Manager. 
 
-*  Deploy a subnet in the Wavelength Zone
+With Session Manager, you can manage your Amazon Elastic Compute Cloud (Amazon EC2) instances using an interactive one-click browser-based shell or the AWS Command Line Interface (AWS CLI).
 
-        export WL_SUBNET_ID=$(aws ec2 create-subnet \
-        --region $REGION \
-        --output text \
-        --cidr-block 10.0.0.0/24 \
-        --availability-zone $WL_ZONE \
-        --vpc-id $VPC_ID \
-        --query 'Subnet.SubnetId') \
-        && echo '\nWL_SUBNET_ID='$WL_SUBNET_ID
+By default, AWS Systems Manager doesn't have permission to perform actions on your instances. You must grant access by using AWS Identity and Access Management (IAM). 
 
-*  Create the route table for the Wavelength subnet
+For our EC2 instance, we will use an instance profile, which passes an IAM role to an Amazon EC2 instance. You can attach an IAM instance profile to an Amazon EC2 instance as you launch it or to a previously launched instance. 
 
-        export WL_RT_ID=$(aws ec2 create-route-table \
-        --region $REGION \
-        --output text \
-        --vpc-id $VPC_ID \
-        --query 'RouteTable.RouteTableId') \
-        && echo '\nWL_RT_ID='$WL_RT_ID
+In this module, we will start by creating a custom IAM policy document and trust policy.
+```
+    cat <<EOF > ssm-policy.json 
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "ssm:UpdateInstanceInformation",
+                    "ssmmessages:CreateControlChannel",
+                    "ssmmessages:CreateDataChannel",
+                    "ssmmessages:OpenControlChannel",
+                    "ssmmessages:OpenDataChannel"
+                ],
+                "Resource": "*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetEncryptionConfiguration"
+                ],
+                "Resource": "*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "kms:Decrypt"
+                ],
+                "Resource": "$EC2_KEY"
+            }
+        ]
+    }
+    EOF
+    
+    cat <<EOF > ec2-trust-policy.json 
+    {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "ec2.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+    }
+    EOF
+    SSM_POLICY_ARN=$(aws iam create-policy --policy-name ssm-wavelength-policy --policy-document file://ssm-policy.json --query Policy.Arn) && echo `SSM_POLICY_ARN=`$SSM_POLICY_ARN
+```
 
-*  Associate the route table with the subnet. 
+Next, we will create the IAM role and attach the policy to it.
+```
+    ROLE_NAME=$(aws iam create-role --role-name wavelength-ec2-ssm --assume-role-policy-document file://ec2-trust-policy.json --query Role.RoleName) && echo `ROLE_NAME=`$ROLE_NAME
+    aws iam attach-role-policy --role-name $ROLE_NAME --policy-arn $SSM_POLICY_ARN
+```
 
-        aws ec2 associate-route-table \
-        --region $REGION \
-        --route-table-id $WL_RT_ID \
-        --subnet-id $WL_SUBNET_ID
+Next, call the `create-instance-profile` command followed by the `add-role-to-instance-profile` command to create an IAM instance profile named Wavelength-EC2-Instance-Profile. The instance profile allows Amazon EC2 to pass the IAM role named `wavelength-ec2-ssm` to an Amazon EC2 instance when the instance is first launched:
+```
+    aws iam create-instance-profile --instance-profile-name Wavelength-EC2-Instance-Profile
+    aws iam add-role-to-instance-profile --instance-profile-name Wavelength-EC2-Instance-Profile --role-name $ROLE_NAME
+```
 
-* Add a default route to the route table that routes traffic through the carrier gateway. 
-
-        aws ec2 create-route \
-        --region $REGION \
-        --route-table-id $WL_RT_ID \
-        --destination-cidr-block 0.0.0.0/0 \
-        --carrier-gateway-id $CAGW_ID
-
-##### Create the bastion subnet
-
-*  Deploy a subnet into the VPC letting AWS pick the availability zone. 
-
-        BASTION_SUBNET_ID=$(aws ec2 create-subnet \
-        --region $REGION \
-        --output text \
-        --cidr-block 10.0.1.0/24 \
-        --vpc-id $VPC_ID \
-        --query 'Subnet.SubnetId') \
-        && echo '\nBASTION_SUBNET_ID='$BASTION_SUBNET_ID
-
-*  Deploy the bastion subnet route table.
-
-        export BASTION_RT_ID=$(aws ec2 create-route-table \
-        --region $REGION \
-        --output text \
-        --vpc-id $VPC_ID \
-        --query 'RouteTable.RouteTableId') \
-        && echo '\nBASTION_RT_ID='$BASTION_RT_ID
-
-* Associate the route table with the subnet. 
-
-        aws ec2 associate-route-table \
-        --region $REGION \
-        --subnet-id $BASTION_SUBNET_ID \
-        --route-table-id $BASTION_RT_ID
-
-
-* Create a default route that routes traffic to the Internet via the Internet gateway.
-
-        aws ec2 create-route \
-        --region $REGION \
-        --route-table-id $BASTION_RT_ID \
-        --destination-cidr-block 0.0.0.0/0 \
-        --gateway-id $IGW_ID
-
-
-
-*  Modify the bastion subnet to assign public IPs by default
-
-        aws ec2 modify-subnet-attribute \
-        --region $REGION \
-        --subnet-id $BASTION_SUBNET_ID \
-        --map-public-ip-on-launch
+Lastly, attach the instance profile to the EC2 instance:
+``` 
+    aws ec2 associate-iam-instance-profile --iam-instance-profile Name=Wavelength-EC2-Instance-Profile --instance-id $EC2_WLZ_ID
+```
