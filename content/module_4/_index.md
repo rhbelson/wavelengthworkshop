@@ -10,14 +10,24 @@ A bastion host is a server whose purpose is to provide access to a private netwo
 ##### Create the Bastion Subnet
 
 *  Deploy a subnet into the VPC letting AWS pick the availability zone. 
-
+```
         BASTION_SUBNET_ID=$(aws ec2 create-subnet \
         --region $REGION \
         --output text \
-        --cidr-block 10.0.1.0/24 \
+        --cidr-block 10.0.4.0/24 \
         --vpc-id $VPC_ID \
         --query 'Subnet.SubnetId') \
         && echo '\nBASTION_SUBNET_ID='$BASTION_SUBNET_ID
+        
+
+        BASTION_SUBNET_ID2=$(aws ec2 create-subnet \
+        --region $REGION \
+        --output text \
+        --cidr-block 10.0.5.0/24 \
+        --vpc-id $VPC_ID \
+        --query 'Subnet.SubnetId') \
+        && echo '\nBASTION_SUBNET_ID2='$BASTION_SUBNET_ID2
+```
 
 *  Deploy the bastion subnet route table.
 
@@ -33,6 +43,10 @@ A bastion host is a server whose purpose is to provide access to a private netwo
         aws ec2 associate-route-table \
         --region $REGION \
         --subnet-id $BASTION_SUBNET_ID \
+        --route-table-id $BASTION_RT_ID
+        aws ec2 associate-route-table \
+        --region $REGION \
+        --subnet-id $BASTION_SUBNET_ID2 \
         --route-table-id $BASTION_RT_ID
 
 

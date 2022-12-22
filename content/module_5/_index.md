@@ -174,7 +174,7 @@ In this section, we will create an additional security group for our EKS control
 Now we are ready to launch the EKS Control Plane! To do so, we will use the `create-cluster` command, passing in a number of attributes including the Kubernetes Version, IAM Role, subnets for our control plane, cluster security group, and cluster endpoint access configuration.
 
 ```
-        aws eks create-cluster --name $eks_cluster_name  --kubernetes-version 1.21 --role-arn $eks_aws_role_arn --resources-vpc-config subnetIds=$REGION_AZ1_SUBNET,$REGION_AZ2_SUBNET,securityGroupIds=$EKS_CLUSTER_SG_ID,endpointPublicAccess=true,endpointPrivateAccess=true
+        aws eks create-cluster --name $eks_cluster_name  --kubernetes-version 1.21 --role-arn $eks_aws_role_arn --resources-vpc-config subnetIds=$BASTION_SUBNET_ID,$BASTION_SUBNET_ID2,securityGroupIds=$EKS_CLUSTER_SG_ID,endpointPublicAccess=true,endpointPrivateAccess=true
         
         Sample Output:
         {
