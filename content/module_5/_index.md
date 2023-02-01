@@ -27,7 +27,7 @@ The API server will be a t3.instance based on a standard Ubuntu 18.04 AMI.
         aws ec2 describe-instances --region $REGION --instance-ids $API_INSTANCE_ID \
         --query 'Reservations[0].Instances[0].{"API server private IP": PrivateIpAddress}'  
 
-* NOTE: Should you not have a Bell 5G network-connected device, run the API server in the region with the following:
+* NOTE: Should you not have a Vodafone 5G network-connected device, run the API server in the region with the following:
         
         export API_INSTANCE_ID=$(aws ec2 run-instances \
         --region $REGION  \

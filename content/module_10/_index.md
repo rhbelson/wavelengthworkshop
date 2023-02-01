@@ -18,8 +18,8 @@ In this last step, you will clean-up the resources created from this wokrshop th
 
 * Next, release the Carrier IP addresses that were allocated to the API Server and Inference Server
     ```
-    aws ec2 release-address --network-border-group ca-central-1-wl1-yto-wlz-1 --allocation-id $API_CIP_ALLOC_ID
-    aws ec2 release-address --network-border-group ca-central-1-wl1-yto-wlz-1 --allocation-id $INFERENCE_CIP_ALLOC_ID
+    aws ec2 release-address --network-border-group eu-west-2-wl1-man-wlz-1 --allocation-id $API_CIP_ALLOC_ID
+    aws ec2 release-address --network-border-group eu-west-2-wl1-man-wlz-1 --allocation-id $INFERENCE_CIP_ALLOC_ID
     ```
     
 * Finally, delite the Elastic Network Interfaces (ENI) created for the two EC2 instances
@@ -28,8 +28,8 @@ In this last step, you will clean-up the resources created from this wokrshop th
     aws ec2 delete-network-interface --network-interface-id $API_ENI_ID
     ```
 
-* Navigate to the [VPC Managent Console](https://ca-central-1.console.aws.amazon.com/vpc/home?region=ca-central-1#vpcs:) to see the list of your running VPCs. 
-* When you find the VPC named **Bell-5G-Wavelength-VPC**, select the checkbox on the left-hand side, then select **Actions** in the top right followed by **Delete VPC**.
+* Navigate to the [VPC Managent Console](https://eu-west-2.console.aws.amazon.com/vpc/home?region=eu-west-2#vpcs:) to see the list of your running VPCs. 
+* When you find the VPC named **Vodafone-Distributed-MEC-VPC**, select the checkbox on the left-hand side, then select **Actions** in the top right followed by **Delete VPC**.
 * To confirm deletion, follow the instructions and type **delete** in the user input field, followed by the **Delete** button in orange.
 
 

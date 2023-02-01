@@ -1,7 +1,6 @@
 ---
-title: "AWS Wavelength Workshop for Bell 5G"
+title: "AWS Wavelength Workshop for Vodafone Distributed MEC"
 chapter: true
 weight: 1
 ---
 
-# AWS Wavelength Workshop (Bell 5G)

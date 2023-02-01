@@ -3,7 +3,7 @@ title = "Step 9 - Test the Application"
 weight = 80
 +++
 
-In this final step you'll use your Bell 5G-connected device to access the running application. 
+In this final step you'll use your Vodafone 5G-connected device to access the running application. 
 
 * Visit the Chrome or Safari app on your mobile device
 
