@@ -46,3 +46,5 @@ After a few minutes, you should see the ADOT collector and Prometheus by running
         kubectl patch deployment -n kube-system kube-state-metrics -p '{"spec": {"template": {"spec": {"nodeSelector": {"parent-region": "true"}}}}}' 
 ```
 At this point, navigate to your Amazon Managed Grafana workspace and browse the available dashboads!
+
+![Amazon Managed Service for Grafana Dashboards](./module_7/amg.png)
