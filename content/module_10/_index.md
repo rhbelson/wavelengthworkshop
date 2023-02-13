@@ -21,7 +21,7 @@ In this last step, you will clean-up the resources created from this wokrshop th
     aws ec2 delete-security-group --group-id $EKS_CLUSTER_SG_ID
     ```
 
-* Navigate to the [VPC Managent Console](https://us-west-2.console.aws.amazon.com/vpc/home?region=us-west-2#vpcs:) to see the list of your running VPCs. 
+* Navigate to the [VPC Management Console](https://us-west-2.console.aws.amazon.com/vpc/home?region=us-west-2#vpcs:) to see the list of your running VPCs. 
 * When you find the VPC named **Wavelength-Workshop-VPC**, select the checkbox on the left-hand side, then select **Actions** in the top right followed by **Delete VPC**.
 * To confirm deletion, follow the instructions and type **delete** in the user input field, followed by the **Delete** button in orange.
 
