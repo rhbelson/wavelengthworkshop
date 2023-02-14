@@ -7,8 +7,8 @@ weight = 20
 
 *  First, we need to confirm vCPU limits to ensure your account can launch two t3.medium instances and one g4dn.2xlarge instances.
     ```
-    aws service-quotas request-service-quota-increase --service-code ec2 --quota-code L-DB2E81BA --region eu-west-2 --desired-value 16
-    aws service-quotas request-service-quota-increase --service-code ec2 --quota-code L-1216C47A --region eu-west-2 --desired-value 16
+    aws service-quotas request-service-quota-increase --service-code ec2 --quota-code L-1216C47A --region ca-central-1 --desired-value 16
+    aws service-quotas request-service-quota-increase --service-code ec2 --quota-code L-DB2E81BA --region ca-central-1 --desired-value 16
     ```
 
 *  In order to get started, you will set some environment variables. Start by generating a key pair to use in the region (defaults to eu-west-2). If you have not done so, please run the following:
@@ -20,12 +20,12 @@ weight = 20
     
 *  Next, let's define the environment variables that we'll use throughout the workshop.
     ```
-    export REGION="eu-west-2"
-    export WL_ZONE="eu-west-2-wl1-man-wlz-1"
-    export NBG="eu-west-2-wl1-man-wlz-1"
-    export INFERENCE_IMAGE_ID="ami-05925041f0a0c4d70"
-    export API_IMAGE_ID="ami-07092d732afc011fa"
-    export BASTION_IMAGE_ID="ami-08cd358d745620807"
+    export REGION="ca-central-1"
+    export WL_ZONE="ca-central-1-wl1-yto-wlz-1"
+    export NBG="ca-central-1-wl1-yto-wlz-1"
+    export INFERENCE_IMAGE_ID="ami-004a0b50ac8808acb"
+    export API_IMAGE_ID="ami-089f7c9524e7245f9"
+    export BASTION_IMAGE_ID="ami-046a5648dee483245"
     export KEY_NAME="my_key_pair"
     ```
 
@@ -35,7 +35,7 @@ weight = 20
     --region $REGION  \
     --output text  \
     --cidr-block 10.0.0.0/16  \
-    --tag-specifications ResourceType=vpc,Tags='[{Key=Name,Value="Vodafone-Distributed-MEC-VPC"}]' \
+    --tag-specifications ResourceType=vpc,Tags='[{Key=Name,Value="Bell-5G-Wavelength-VPC"}]' \
     --query 'Vpc.VpcId')  \
     && echo '\nVPC_ID='$VPC_ID
     ```
