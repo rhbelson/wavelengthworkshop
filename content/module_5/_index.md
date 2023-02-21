@@ -19,6 +19,7 @@ The API server will be a t3.instance based on a standard Ubuntu 18.04 AMI.
         --image-id $API_IMAGE_ID \
         --query 'Instances[0].InstanceId' \
         --key-name $KEY_NAME) \
+        --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=Vodafone-API-Server}]' \
         && echo '\nAPI Server Instance ID '$API_INSTANCE_ID
 
 
@@ -29,7 +30,7 @@ The API server will be a t3.instance based on a standard Ubuntu 18.04 AMI.
 
 * NOTE: Should you not have a Vodafone 5G network-connected device, run the API server in the region with the following:
         
-        export API_INSTANCE_ID=$(aws ec2 run-instances \
+        export BASTION_INSTANCE_ID=$(aws ec2 run-instances \
         --region $REGION  \
         --output text \
         --instance-type t3.medium \
@@ -37,9 +38,10 @@ The API server will be a t3.instance based on a standard Ubuntu 18.04 AMI.
         --subnet-id $BASTION_SUBNET_ID \
         --image-id $API_IMAGE_ID \
         --query 'Instances[0].InstanceId' \
+        --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=Vodafone-Bastion-Server}]' \
         --security-group-ids $API_SG_ID \
         --key-name $KEY_NAME) \
-        && echo '\nBastion Instance ID' $API_INSTANCE_ID
+        && echo '\nBastion Instance ID' $BASTION_INSTANCE_ID
 
 ##### Deploy the inference intance
 
@@ -55,6 +57,7 @@ The inference server is a g4dn.2xlarge running the AWS deep learning AMI.
          --image-id $INFERENCE_IMAGE_ID \
          --query 'Instances[0].InstanceId' \
          --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"VolumeType":"gp2"}}]' \
+         --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=Vodafone-Inference-Server}]' \
          --key-name $KEY_NAME) \
          && echo '\nInference Server Instance ID' $INF_INSTANCE_ID
 
