@@ -18,8 +18,8 @@ The API server will be a t3.instance based on a standard Ubuntu 18.04 AMI.
         --network-interface '[{"DeviceIndex":0,"NetworkInterfaceId":"'$API_ENI_ID'"}]' \
         --image-id $API_IMAGE_ID \
         --query 'Instances[0].InstanceId' \
-        --key-name $KEY_NAME) \
         --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=Vodafone-API-Server}]' \
+        --key-name $KEY_NAME) \
         && echo '\nAPI Server Instance ID '$API_INSTANCE_ID
 
 
