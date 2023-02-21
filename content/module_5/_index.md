@@ -30,7 +30,7 @@ The API server will be a t3.instance based on a standard Ubuntu 18.04 AMI.
 
 * NOTE: Should you not have a Vodafone 5G network-connected device, run the API server in the region with the following:
         
-        export BASTION_INSTANCE_ID=$(aws ec2 run-instances \
+        export API_INSTANCE_ID=$(aws ec2 run-instances \
         --region $REGION  \
         --output text \
         --instance-type t3.medium \
@@ -38,10 +38,10 @@ The API server will be a t3.instance based on a standard Ubuntu 18.04 AMI.
         --subnet-id $BASTION_SUBNET_ID \
         --image-id $API_IMAGE_ID \
         --query 'Instances[0].InstanceId' \
-        --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=Vodafone-Bastion-Server}]' \
+        --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=Vodafone-API-Region-Server}]' \
         --security-group-ids $API_SG_ID \
         --key-name $KEY_NAME) \
-        && echo '\nBastion Instance ID' $BASTION_INSTANCE_ID
+        && echo '\nBastion Instance ID' $API_INSTANCE_ID
 
 ##### Deploy the inference intance
 
@@ -88,6 +88,7 @@ bastion host.
         --image-id $BASTION_IMAGE_ID \
         --query 'Instances[0].InstanceId' \
         --security-group-ids $BASTION_SG_ID \
+        --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=Vodafone-Bastion-Server}]' \
         --key-name $KEY_NAME) \
         && echo '\nBastion Instance ID' $BASTION_INSTANCE_ID
 
