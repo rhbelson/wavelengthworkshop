@@ -18,11 +18,11 @@ The last server you deployed serves two purposes. It acts as the bastion host al
 
     ***Note:*** In order to be able to easily SSH from the bastion host to the inference or API servers you will want to use the -A (agent forwarding) parameter when starting your SSH session e.g.:
 
-        ssh -i key.pem -A ec2-user@<bastion public ip address>
+        ssh -i my_key_pair.pem -A ec2-user@<bastion public ip address>
 
     For example:
 
-        ssh -i my_key.pem -A ec2-user@192.168.0.1
+        ssh -i my_key_pair.pem -A ec2-user@192.168.0.1
 
 *  Download dependencies for git and npm
 
