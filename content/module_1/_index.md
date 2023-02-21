@@ -14,7 +14,7 @@ weight = 20
 *  In order to get started, you will set some environment variables. Start by generating a key pair to use in the region (defaults to eu-west-2). If you have not done so, please run the following:
 
     ```
-    aws ec2 create-key-pair --key-name my_key_pair --query 'KeyMaterial' --output text > my_key_pair.pem
+    aws ec2 create-key-pair --key-name my_key_pair --region eu-west-2 --query 'KeyMaterial' --output text > my_key_pair.pem
     chmod 400 my_key_pair.pem
     ```
     
