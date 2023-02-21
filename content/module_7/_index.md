@@ -47,8 +47,7 @@ If the system returns just the line below, then you should try the running the u
 
 *  Install Torchserve and its related components.
     ```
-        pip3 install \
-        wheel pyyaml torch torchtext torchvision sentencepiece psutil torchserve torch-model-archiver captum nvgpu 
+        pip3 install wheel pyyaml torch==1.12.0 torchtext==0.13.0 torchvision==0.13 sentencepiece psutil torchserve==0.6 torch-model-archiver captum nvgpu 
     ```
 *  Install the inference model that the application will use.
     
@@ -77,6 +76,7 @@ If the system returns just the line below, then you should try the running the u
         echo inference_address=http://$INF_PRIVATE_IP:8080 > config.properties
         echo management_address=http://$INF_PRIVATE_IP:8081 >> config.properties
         cat config.properties
+
 
 *  Start the Torchserve server
     
