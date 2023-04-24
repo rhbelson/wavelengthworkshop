@@ -4,9 +4,8 @@ chapter: true
 weight: 1
 ---
 
-# AWS Wavelength Workshop
 
-    In this user guide, learn the fundamentals of 5G mobile networks, mobile edge computing (MEC) alongside a step-by-step guide to deploying your first application AWS Wavelength. Moreover, learn how to measure application performance and troubleshoot popular FAQs and configurations.
+In this user guide, learn the fundamentals of 5G mobile networks, mobile edge computing (MEC) alongside a step-by-step guide to deploying your first application AWS Wavelength. Moreover, learn how to measure application performance and troubleshoot popular FAQs and configurations.
 
 {{< youtube EhMqwPqPzcY >}}
 
