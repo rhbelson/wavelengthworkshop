@@ -9,6 +9,8 @@ weight: 1
 * In this user guide, learn the fundamentals of 5G mobile networks, mobile edge computing (MEC) alongside a step-by-step guide to deploying your first application AWS Wavelength. Moreover, learn how to measure application performance and troubleshoot popular FAQs and configurations.
 
 ### What is AWS Wavelength?
+<iframe src="https://www.youtube.com/watch?v=EhMqwPqPzcY"> </iframe> 
+
 *   AWS Wavelength is an infrastructure service, powered by Amazon Web Services (AWS), that enables developers to build applications within the 5G mobile network to deliver lower latency, more immersive experiences. 
 - AWS Wavelength offers developers standard AWS compute and storage services at the edge of Telecommunications providers' 5G networks via the extension a virtual private cloud (VPC) to one or more Wavelength Zones. 
 - An AWS Wavelength Zone is a zone in a carrier 5G network where the AWS Wavelength infrastructure is deployed. Each Wavelength Zone is associated with a parent AWS Region. 

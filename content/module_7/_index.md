@@ -33,18 +33,8 @@ To get started, clone this GitHub repo, navigate to the existing-cluster-with-ba
         terraform init
         terraform apply -auto-approve # Be sure to Save & Test Data Sources by navigating to https://<your-workspace>.<region>.amazonaws.com/datasources/edit/
 ```
-After a few minutes, you should see the ADOT collector and Prometheus by running kubectl get pods --all-namespaces. However, given the hub-and-spoke design of AWS Wavelength, we must ensure that all control plane elements are reachable by all nodes and, thus, scheduled to the parent region. To make our lives easy, lest label the parent region nodes as such and use NodeSelectors to patch our existing workloads.
+After a few minutes, you should see the ADOT collector and Prometheus by running `kubectl get pods --all-namespaces`. 
 
-```
-        kubetl label nodes ip-10-0-1-134.ec2.internal parent-region=true
-        kubectl label nodes ip-10-0-2-148.ec2.internal  parent-region=true
-        kubectl patch deployment adot-collector -n adot-collector-kubeprometheus -p '{"spec": {"template": {"spec": {"nodeSelector": {"parent-region": "true"}}}}}' 
-        kubectl patch deployment -n cert-manager cert-manager -p '{"spec": {"template": {"spec": {"nodeSelector": {"parent-region": "true"}}}}}' 
-        kubectl patch deployment -n cert-manager cert-manager-cainjector -p '{"spec": {"template": {"spec": {"nodeSelector": {"parent-region": "true"}}}}}' 
-        kubectl patch deployment -n cert-manager cert-manager-webhook -p '{"spec": {"template": {"spec": {"nodeSelector": {"parent-region": "true"}}}}}' 
-        kubectl patch deployment -n opentelemetry-operator-system  opentelemetry-operator-controller-manager -p '{"spec": {"template": {"spec": {"nodeSelector": {"parent-region": "true"}}}}}' 
-        kubectl patch deployment -n kube-system kube-state-metrics -p '{"spec": {"template": {"spec": {"nodeSelector": {"parent-region": "true"}}}}}' 
-```
 At this point, navigate to your Amazon Managed Grafana workspace and browse the available dashboads!
 
 ![Amazon Managed Service for Grafana Dashboards](./module_7/amg.png)
