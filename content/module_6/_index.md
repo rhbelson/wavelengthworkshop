@@ -49,3 +49,82 @@ You can use eksctl or the AWS CLI and kubectl to create the IAM role and Kuberne
 
 ### Create Sample Workload
 In this example, we will create a simple web Deployment in front of an Ingress, which will provision an ALB upon creation.
+
+
+To start, follow [Deploy a sample application](https://docs.aws.amazon.com/eks/latest/userguide/sample-deployment.html) from the Amazon EKS User Guide to deploy the following:
+
+```
+kubectl create namespace eks-sample-app
+```
+
+Next, create a file `sample-app.yaml` with the following:
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eks-sample-linux-deployment
+  namespace: eks-sample-app
+  labels:
+    app: eks-sample-linux-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: eks-sample-linux-app
+  template:
+    metadata:
+      labels:
+        app: eks-sample-linux-app
+    spec:
+      containers:
+      - name: nginx
+        image: public.ecr.aws/nginx/nginx:1.21
+        ports:
+        - name: http
+          containerPort: 80
+        imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eks-sample-linux-service
+  namespace: eks-sample-app
+  labels:
+    app: eks-sample-linux-app
+spec:
+  selector:
+    app: eks-sample-linux-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: eks-sample-app
+  annotations:
+    alb.ingress.kubernetes.io/subnets: <your-wavelength-subnet-id>
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: eks-sample-linux-service
+            port:
+              number: 80
+```
+
+Be sure to change `<your-wavelength-subnet-id>` with the Subnet ID of your Wavelength Zone, found in the `$SFO_WLZ_SUBNET` variable.
+
+Next, apply the configuration manifest.
+```
+kubectl apply -f sample-app.yaml
+```
