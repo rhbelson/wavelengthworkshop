@@ -29,7 +29,16 @@ A bastion host is a server whose purpose is to provide access to a private netwo
         && echo '\nBASTION_SUBNET_ID2='$BASTION_SUBNET_ID2
 ```
 
-*  Deploy the bastion subnet route table.
+*  Create and attach an Internet Gateway.
+
+        IGW_ID=$(aws ec2 create-internet-gateway --tag-specifications 'ResourceType=internet-gateway,Tags=[{Key=Name,Value=region-igw}]' \
+        --query 'InternetGateway.InternetGatewayId' \
+        --output text)
+        
+        aws ec2 attach-internet-gateway --internet-gateway-id $IGW_ID --vpc-id $VPC_ID
+
+
+*  Create the bastion subnet route table.
 
         export BASTION_RT_ID=$(aws ec2 create-route-table \
         --region $REGION \
@@ -73,7 +82,7 @@ A bastion host is a server whose purpose is to provide access to a private netwo
           --group-id $WAVELENGTH_SG_ID \
           --protocol tcp \
           --port 22 \
-          --source-group $WAVELENGTH_SG_ID
+          --source-group $BASTION_SG_ID
 
 
 #### Deploy the Bastion Host

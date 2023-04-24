@@ -5,9 +5,9 @@ weight = 10
 
 This workshop is intended to serve as a use case-agnostic overview of all of AWS Wavelength's native features and popular reference patterns, including:
 
--   AWS Wavelength subnets, Route Tables Carrier Gateway
--   Amazon EC2 instances and Carrier IP Addresses
--   Amazon EKS self-managed Node Groups
+-   AWS Wavelength Subnets, Route Tables Carrier Gateway
+-   Amazon EC2 Instances and Carrier IP Addresses
+-   Amazon EKS Self-managed Node Groups
 -   Application Load Balancer (ALB)
 
 Moreover, this workshop will cover other infrastructure-agnostic techniques, optimized for edge, including:

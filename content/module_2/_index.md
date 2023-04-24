@@ -62,9 +62,9 @@ Next, let's use the AWS Systems Manager (SSM) API to query the latest Amazon Lin
         AMI_ID_LINUX=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 --query 'Parameters[0].[Value]' --output text) && echo `AMI_ID_LINUX=`$AMI_ID_LINUX
 ```
 
-Now, we're ready to launch our Amazon EC2 instance in the Wavelength Zone! To do so, we will need to provide the SubnetId we would like to use, the Security Group we created earlier, the AMI ID and the key name.
+Now, we're ready to launch our Amazon EC2 instance in the Wavelength Zone! To do so, we will need to provide the `SubnetId` we would like to use, the Security Group we created earlier, the AMI ID and the key name.
 ```
-        EC2_WLZ_ID=$(aws ec2 run-instances --network-interfaces '[{"DeviceIndex":0, "SubnetId": "'"$WAVELENGTH_ZONE_1"'", "AssociateCarrierIpAddress": true, "Groups": ["'"$WAVELENGTH_SG_ID"'"]}]' --image-id $AMI_ID_LINUX --instance-type t3.medium  --key-name $EC2_KEY --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=Wavelength-Getting-Started-EC2-Instance}]' --query 'Instances[0].InstanceId' --output text)        
+        EC2_WLZ_ID=$(aws ec2 run-instances --network-interfaces '[{"DeviceIndex":0, "SubnetId": "'"$SFO_WLZ_SUBNET"'", "AssociateCarrierIpAddress": true, "Groups": ["'"$WAVELENGTH_SG_ID"'"]}]' --image-id $AMI_ID_LINUX --instance-type t3.medium  --key-name $EC2_KEY --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=Wavelength-Getting-Started-EC2-Instance}]' --query 'Instances[0].InstanceId' --output text)        
 ```
 
 If you navigate to the EC2 section of your AWS Console, you will now see an instance named `Wavelength-Getting-Started-EC2-Instance`. Another way to ensure that the Amazon EC2 instance was created properly is to query the Carrier IP address, like this:
