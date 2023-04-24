@@ -285,8 +285,8 @@ We're almost ready to deploy a sample workload to our EKS Cluster! To grant addi
 
 **Step 1:** Obtain the EKS Node Profile Variable and Security Group of the Self-Managed Nodes
 ```
-eks_node_profile=$(aws cloudformation describe-stacks --stack-name $stack_name --query "Stacks[0].Outputs[?OutputKey=='NodeInstanceRole'].OutputValue" --output text) && echo 'eks_node_profile='$eks_node_profile
-eks_node_securitygroup=$(aws cloudformation describe-stacks --stack-name $stack_name --query "Stacks[0].Outputs[?OutputKey=='NodeSecurityGroup'].OutputValue" --output text) && echo 'eks_node_securitygroup='$eks_node_securitygroup
+        eks_node_profile=$(aws cloudformation describe-stacks --stack-name $stack_name --query "Stacks[0].Outputs[?OutputKey=='NodeInstanceRole'].OutputValue" --output text) && echo 'eks_node_profile='$eks_node_profile
+        eks_node_securitygroup=$(aws cloudformation describe-stacks --stack-name $stack_name --query "Stacks[0].Outputs[?OutputKey=='NodeSecurityGroup'].OutputValue" --output text) && echo 'eks_node_securitygroup='$eks_node_securitygroup
 ```
 
 **Step 2:** Allocate a Carrier IP for the EKS Worker Node

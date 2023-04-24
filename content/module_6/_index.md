@@ -54,7 +54,7 @@ In this example, we will create a simple web Deployment in front of an Ingress, 
 To start, follow [Deploy a sample application](https://docs.aws.amazon.com/eks/latest/userguide/sample-deployment.html) from the Amazon EKS User Guide to deploy the following:
 
 ```
-kubectl create namespace eks-sample-app
+    kubectl create namespace eks-sample-app
 ```
 
 Next, create a file `sample-app.yaml` with the following:
@@ -126,5 +126,5 @@ Be sure to change `<your-wavelength-subnet-id>` with the Subnet ID of your Wavel
 
 Next, apply the configuration manifest.
 ```
-kubectl apply -f sample-app.yaml
+    kubectl apply -f sample-app.yaml
 ```

@@ -88,6 +88,6 @@ To use the AWS CLI to run session commands, the Session Manager plugin must also
 To start a session using the AWS CLI, run the following command replacing instance-id with your own information.
 
 ```
-aws ssm start-session \
-    --target $EC2_WLZ_ID
+    aws ssm start-session \
+        --target $EC2_WLZ_ID
 ```

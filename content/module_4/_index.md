@@ -91,39 +91,39 @@ You must deploy a bastion server in order to SSH into your application instances
 
 To start, let's launch the Bastion Host using Amazon EC2.
 ```
-     export BASTION_INSTANCE_ID=$(aws ec2 run-instances \
-     --region $REGION  \
-     --output text \
-     --instance-type t3.medium \
-     --associate-public-ip-address \
-     --subnet-id $BASTION_SUBNET_ID \
-     --image-id $AMI_ID_LINUX \
-     --query 'Instances[0].InstanceId' \
-     --security-group-ids $WAVELENGTH_SG_ID \
-     --key-name $KEY_NAME) \
-     && echo '\nBastion Instance ID' $BASTION_INSTANCE_ID
+         export BASTION_INSTANCE_ID=$(aws ec2 run-instances \
+         --region $REGION  \
+         --output text \
+         --instance-type t3.medium \
+         --associate-public-ip-address \
+         --subnet-id $BASTION_SUBNET_ID \
+         --image-id $AMI_ID_LINUX \
+         --query 'Instances[0].InstanceId' \
+         --security-group-ids $WAVELENGTH_SG_ID \
+         --key-name $KEY_NAME) \
+         && echo '\nBastion Instance ID' $BASTION_INSTANCE_ID
 ```
 
 Take note of the bastion server public IP address that you will use in the subsequent step.
 ```
-      aws ec2 describe-instances --region $REGION --instance-ids $BASTION_INSTANCE_ID \
-      --query 'Reservations[0].Instances[0].{"Bastion server public IP": PublicIpAddress}' 
+          aws ec2 describe-instances --region $REGION --instance-ids $BASTION_INSTANCE_ID \
+          --query 'Reservations[0].Instances[0].{"Bastion server public IP": PublicIpAddress}' 
 ```
 
 Now, let's SSH into our Bastion Host but to do so, let's configure key forwarding. Be sure to replace `<bastion-public-ip>` with the output of the PublicIpAddress above.
 ```
-    eval "$(ssh-agent)"
-    ssh-add edge-key.pem
-    
-    ssh -i edge-key.pem ec2-user@<bastion-public-ip> -A
+        eval "$(ssh-agent)"
+        ssh-add edge-key.pem
+        
+        ssh -i edge-key.pem ec2-user@<bastion-public-ip> -A
 ```
 
 Lastly, from the bastion host, SSH into the Wavelength Zone instnace. Please note that, given we configured key forwarding, you won't need to explicitly pass the key name directly in this command.
 Moreover, given that the Bastion Host already resides within the same VPC as the Wavelength Zone instance, we will only need to SSH directly to the Private IP address. To do so, we need to query the EC2 API to retrieve the Private IP address of the bastion host first.
 
 ```
-    EC2_WLZ_PRIVATE_IP=$(aws ec2 describe-instances --instance-id $EC2_WLZ_ID --query 'Reservations[*].Instances[*].[PrivateIpAddress]' --output text) && echo 'EC2_WLZ_PRIVATE_IP='$EC2_WLZ_PRIVATE_IP
-    ssh ec2-user@$EC2_WLZ_PRIVATE_IP
+        EC2_WLZ_PRIVATE_IP=$(aws ec2 describe-instances --instance-id $EC2_WLZ_ID --query 'Reservations[*].Instances[*].[PrivateIpAddress]' --output text) && echo 'EC2_WLZ_PRIVATE_IP='$EC2_WLZ_PRIVATE_IP
+        ssh ec2-user@$EC2_WLZ_PRIVATE_IP
 ```
 
 Congratulations, you have now completed the setup for your Bastion Host!
