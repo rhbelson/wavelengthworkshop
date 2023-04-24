@@ -10,7 +10,7 @@ weight: 1
 
 {{< youtube EhMqwPqPzcY >}}
 
-## What is AWS Wavelength?
+**What is AWS Wavelength?**
 - AWS Wavelength is an infrastructure service, powered by Amazon Web Services (AWS), that enables developers to build applications within the 5G mobile network to deliver lower latency, more immersive experiences. AWS Wavelength offers developers standard AWS compute and storage services at the edge of Telecommunications providers' 5G networks via the extension a virtual private cloud (VPC) to one or more Wavelength Zones. 
 
 - An AWS Wavelength Zone is a zone in a carrier 5G network where the AWS Wavelength infrastructure is deployed. Each Wavelength Zone is associated with a parent AWS Region. While AWS Wavelength is optimized for 5G networks, any 4G or 5G-connected device (for the given carrier) can access the AWS Wavelength Zone

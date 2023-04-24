@@ -11,9 +11,10 @@ This workshop is intended to serve as a use case-agnostic overview of all of AWS
 -   Application Load Balancer (ALB)
 
 Moreover, this workshop will cover other infrastructure-agnostic techniques, optimized for edge, including:
-- Observability and Performance Testing
-- Workload Placement using Pod Topology Spread Constraints
-- Edge Discovery for north-south Traffic Routing
+
+-  Observability and Performance Testing
+-  Workload Placement using Pod Topology Spread Constraints
+-  Edge Discovery for north-south Traffic Routing
 
 ### More About AWS Wavelength
 Today, to reach cloud computing environments (including the AWS Region), traffic must traverse from a base station, through the backhaul network, anchor to a mobile IP address in the core, and then egress the cellular access network to the internet at-large. As a result of each of these logical “hops,” mobile traffic incurs a latency penalty (often in milliseconds) across each hop in a mobile packets journey, amounting to ~80-100ms in round-trip delay.
