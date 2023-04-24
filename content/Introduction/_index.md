@@ -3,6 +3,8 @@ title = "Introduction"
 weight = 10
 +++
 
+# AWS Wavelength Workshop
+
 This workshop is intended to serve as a use case-agnostic overview of all of AWS Wavelength's native features and popular reference patterns, including:
 
 -   **Networking**: AWS Wavelength Subnets, Carrier Route Tables, Carrier Gateway and Carrier IP Addresses
@@ -13,7 +15,7 @@ Moreover, this workshop will cover other infrastructure-agnostic techniques, opt
 ### More About AWS Wavelength
 Today, to reach cloud computing environments (including the AWS Region), traffic must traverse from a base station, through the backhaul network, anchor to a mobile IP address in the core, and then egress the cellular access network to the internet at-large. As a result of each of these logical “hops,” mobile traffic incurs a latency penalty (often in milliseconds) across each hop in a mobile packets journey, amounting to ~80-100ms in round-trip delay.
 
-![AWS Wavelength and Parent Region](./Introduction/wl_ref.png)
+![AWS Wavelength and Parent Region](./introduction/wl_ref.png)
 
 To optimize latency in mobile environments today, developers can optimize the cloud application performance but what if they could optimize the network itself?
 
