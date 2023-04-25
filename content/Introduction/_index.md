@@ -23,12 +23,16 @@ Instead of needing a “5G expert” on your development teams, AWS Wavelength a
 - An AWS Wavelength Zone is a zone in a carrier 5G network where the AWS Wavelength infrastructure is deployed. Each Wavelength Zone is associated with a parent AWS Region. While AWS Wavelength is optimized for 5G networks, any 4G or 5G-connected device (for the given carrier) can access the AWS Wavelength Zone
 
 ### When to Use AWS Wavelength
-Critical attributes of applications that could benefit from low-latency edge computing on AWS Wavelegnth include:
+Critical attributes of applications that could benefit from low-latency edge computing on AWS Wavelength include:
 - **Security & Data Sovereignty**: Application requires data in close proximity to source of data production or requires traffic flow that does not traverse the public internet
 - **Network Performance**: Application not only requires low latency and high throughput connection, but also prefers heightened quality-of-service or exposure of/to select network attributes
 - **Measureable Impact of Latency on Customer Experience**: Application can quantify benefit of lower latency (in milliseconds), relative to the next best alternative, coupled with the perceived customer impact
 
-### Customers on AWS Wavelength Today
+You might also want to consider the following:
+- **Single Carrier & B2B Applications**: As AWS Wavelength Zones today are only accessible by a single carrier at a time (see [Full List of Locations Here](aws.amazon.com/wavelength/locations/)), it is simplest to utilize AWS Wavelength for mobile B2B applications. Said differently, if you can ensure that all connected devices (e.g., IP cameras, IoT devices, mobile phones) are connected to a single carrier (currently offering AWS Wavelength), all application traffic can be served from that Wavelength Zone.
+- **Integrate AWS Wavelength with Parent Region**: There may be certain services that are not natively supported within AWS Wavelength but whose underlying architectural pattern is best served from the parent region. As an example, you can utilize ML training in the region using Amazon SageMaker and run your [low-latency edge ML models](https://aws.amazon.com/blogs/machine-learning/deploy-pre-trained-models-on-aws-wavelength-with-5g-edge-using-amazon-sagemaker-jumpstart/) on AWS Wavelength.
+
+### AWS Wavelength Customers & Partners
 Check out the following customers across Media & Entertainment, Sports, IoT and beyond!
 
 {{< youtube DJTvkEYJOTs >}}

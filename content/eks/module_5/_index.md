@@ -134,7 +134,7 @@ In this section, we will create an additional security group for our EKS control
             "Role": {
                 "Path": "/",
                 "RoleName": "wavelength-eks-role",
-                "RoleId": "AROASV6M4JDVYB6H562OJ",
+                "RoleId": "<your-role-id>",
                 "Arn": "arn:aws:iam::454545454545:role/wavelength-eks-role",
                 "CreateDate": "2020-10-11T02:53:59+00:00",
                 "AssumeRolePolicyDocument": {
