@@ -3,8 +3,6 @@ title = "Introduction"
 weight = 10
 +++
 
-# AWS Wavelength Workshop
-
 This workshop is intended to serve as a use case-agnostic overview of all of AWS Wavelength's native features and popular reference patterns, including:
 
 -   **Networking**: AWS Wavelength Subnets, Carrier Route Tables, Carrier Gateway and Carrier IP Addresses
@@ -33,6 +31,8 @@ Critical attributes of applications that could benefit from low-latency edge com
 ### Customers on AWS Wavelength Today
 Check out the following customers across Media & Entertainment, Sports, IoT and beyond!
 
-{{< youtube uxflVEmmFHA >}}
-{{< youtube 6jTIWstXMf8 >}}
-{{< youtube S35QNs1Uzx0 >}}
+{{< youtube uxflVEmmFHA title="Crowd Analytics Use Case for Smart Venues" >}}
+<br>
+{{< youtube 6jTIWstXMf8 title="Sports Analytics Use Case for Stadiums" >}}
+<br>
+{{< youtube S35QNs1Uzx0 title="Additional Sports Analytics Use Case for Stadiums" >}}
