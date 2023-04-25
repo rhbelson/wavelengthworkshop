@@ -8,10 +8,9 @@ In this module, learn more about edge discovery and why it can be valuable for m
 **Edge Discovery Service Overview**
 Edge discovery services are APIs that allows you to register any application resources, such as databases, queues, microservices, and other cloud resources, with custom names. Each custom name is a unique identifier referred to as a serviceEndpoints object, consisting of the carrier-facing application service endpoint metadata. Each serviceEndpoint object consists of the carrier IPv4 address (IPv6 not currently supported in AWS Wavelength), an optional FQDN and port, among other metadata. 
 
-When a mobile client seeks to identify the most optimal edge endpoint, the client must first determine its CG-NAT Public IP, through TURN server or other tools (e.g., ifconfig.me). After determining its IP address, it will will pass this value to the required UEIdentity attribute alongside the specific serviceEndpoints identifier to retrieve the most optimal service endpoint. To learn more about the API reference, visit the [5G Future Forum API specifications](https://www.5gff.org/apis/).
+When a mobile client seeks to identify the most optimal edge endpoint, the client must first determine its CG-NAT Public IP, through TURN server or other tools (e.g., ifconfig.me). After determining its IP address, it will will pass this value to the required UEIdentity attribute alongside the specific serviceEndpoints identifier to retrieve the most optimal service endpoint. To learn more about the API reference, visit the [5G Future Forum API specifications](https://www.5gff.org/apis/) or check out this blog below.
 
-{{< figure src="https://aws.amazon.com/blogs/industries/architecting-multi-carrier-interoperability-with-edge-discovery-apis-on-aws-wavelength/
-" title=">Mutli-carrier Edge Discovery Deep Dive" >}}
+{{< figure src="https://d2908q01vomqb2.cloudfront.net/c5b76da3e608d34edb07244cd9b875ee86906328/2023/04/04/Architecting-multi-carrier-interoperability-with-Edge-Discovery-APIs-on-AWS-Wavelength_demo-architecture.png" title=">Mutli-carrier Edge Discovery Deep Dive" >}}
 
 ### Example Configuration
 In this example, we will configure the Verizon Edge Discovery Service API for our US-based Wavelength Zone application.
