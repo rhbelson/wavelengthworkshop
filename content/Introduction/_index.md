@@ -30,10 +30,11 @@ Critical attributes of applications that could benefit from low-latency edge com
 
 ### Customers on AWS Wavelength Today
 Check out the following customers across Media & Entertainment, Sports, IoT and beyond!
-{{< youtube DJTvkEYJOTs title="Immersive Media Experience for Golf Carts" >}}
+
+{{< youtube DJTvkEYJOTs >}}
 <br>
-{{< youtube uxflVEmmFHA title="Crowd Analytics Use Case for Smart Venues" >}}
+{{< youtube uxflVEmmFHA >}}
 <br>
-{{< youtube 6jTIWstXMf8 title="Sports Analytics Use Case for Stadiums" >}}
+{{< youtube 6jTIWstXMf8 >}}
 <br>
-{{< youtube S35QNs1Uzx0 title="Additional Sports Analytics Use Case for Stadiums" >}}
+{{< youtube S35QNs1Uzx0 >}}
