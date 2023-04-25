@@ -5,7 +5,7 @@ weight = 80
 
 In this module, learn more about edge discovery and why it can be valuable for multiple edge-based applications.
 
-**Edge Discovery Service Overview**
+### Edge Discovery Service Overview
 Edge discovery services are APIs that allows you to register any application resources, such as databases, queues, microservices, and other cloud resources, with custom names. Each custom name is a unique identifier referred to as a serviceEndpoints object, consisting of the carrier-facing application service endpoint metadata. Each serviceEndpoint object consists of the carrier IPv4 address (IPv6 not currently supported in AWS Wavelength), an optional FQDN and port, among other metadata. 
 
 When a mobile client seeks to identify the most optimal edge endpoint, the client must first determine its CG-NAT Public IP, through TURN server or other tools (e.g., ifconfig.me). After determining its IP address, it will will pass this value to the required UEIdentity attribute alongside the specific serviceEndpoints identifier to retrieve the most optimal service endpoint. To learn more about the API reference, visit the [5G Future Forum API specifications](https://www.5gff.org/apis/) or check out this blog below.
