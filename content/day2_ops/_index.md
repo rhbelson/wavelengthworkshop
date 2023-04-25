@@ -1,5 +1,5 @@
 +++
-title = "Automation and Edge Discovery"
+title = "Workload Placement and Edge Discovery"
 weight = 40
 +++
 
