@@ -37,4 +37,9 @@ After a few minutes, you should see the ADOT collector and Prometheus by running
 
 At this point, navigate to your Amazon Managed Grafana workspace and browse the available dashboads!
 
-![Amazon Managed Service for Grafana Dashboards](./eks/module_7/amg.png)
+![Amazon Managed Service for Grafana Dashboards](./eks/module_7/dashboard.png)
+
+### More Resources
+*	For manual, lower-fidelity observability tools, consider Ping, iPerf3 or httpstat. Each tool provides different vantage points across latency (ICMP), bandwidth ([iPerf3](https://iperf.fr/iperf-download.php)), or end-to-end latency segmentation ([httpstat](https://github.com/davecheney/httpstat)).
+*	For performance-grade observability tool, consider leveraging popular platforms such as New Relic or Datadog. As an example, to leverage push-button instrumentation using New Relic and Pixie on an AWS Wavelength-based EKS cluster, visit [this Terraform module](https://github.com/newrelic-experimental/vz-newrelic-5g-edge).
+* For application load-testing and measuring impact of network performance on AWS Wavelength application, consider using tools such as [K6](https://k6.io/).
