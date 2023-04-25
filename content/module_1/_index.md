@@ -1,4 +1,4 @@
 +++
 title = "Amazon EKS on AWS Wavelength"
-weight = 20
+weight = 30
 +++
