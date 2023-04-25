@@ -1,4 +1,4 @@
 +++
-title = "Automation and Day 2 Operations"
+title = "Automation and Edge Discovery"
 weight = 40
 +++
