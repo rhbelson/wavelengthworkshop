@@ -37,4 +37,4 @@ After a few minutes, you should see the ADOT collector and Prometheus by running
 
 At this point, navigate to your Amazon Managed Grafana workspace and browse the available dashboads!
 
-![Amazon Managed Service for Grafana Dashboards](./module_7/amg.png)
+![Amazon Managed Service for Grafana Dashboards](./eks/module_7/amg.png)

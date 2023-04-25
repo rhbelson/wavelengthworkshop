@@ -9,6 +9,6 @@ If you have any questions or feedback on any module, please feel free to [reach 
 
 Be sure to provide your feedback in the `Tell us about your project` section and we will get back to you as soon as we can.
 
-![AWS Wavelength Feedback Form](./module_11/feedback.png)
+![AWS Wavelength Feedback Form](./feedback/feedback.png)
 
 Looking for a custom AWS Wavelength Immersion Day for your team? Reach out to us directly to schedule an event virtually or in a city near you!

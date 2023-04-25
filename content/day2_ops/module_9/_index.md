@@ -20,13 +20,13 @@ For the first step, you'll need to create account on our [5G Edge Portal](https:
 
 Once logged in, visit the `API Keys` subsection of the developer portal to get started.
 
-![5G Edge Developer Portal Login](./module_9/console_login.png)
+![5G Edge Developer Portal Login](./day2_ops/module_9/console_login.png)
 
 **Step 2:** Create Key Pair for the Edge Discovery Service<br>
 
 Next, click `Add new key set` in the top-right corner to generate your key pair. You'll notice the application key and secret key and automatically generated below.
 
-![5G Edge Key Pair](./module_9/api_key.png)
+![5G Edge Key Pair](./day2_ops/module_9/api_key.png)
 
 Once you have generated your key pair, take note of your `Key` and your `Secret` pair from the console.
 
